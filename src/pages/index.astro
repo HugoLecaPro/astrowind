@@ -1,398 +1,1358 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 
-import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
-import Features from '~/components/widgets/Features.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Content from '~/components/widgets/Content.astro';
-import BlogLatestPosts from '~/components/widgets/BlogLatestPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-
 const metadata = {
-  title: 'AstroWind — Free template for creating websites with Astro + Tailwind CSS',
+  title: 'Clinician Vision',
   ignoreTitleTemplate: true,
 };
+
+const chapters = [
+  {
+    id: '01',
+    label: 'Clinical tension',
+    title: 'Open with pressure, not product.',
+    copy: 'The first scroll beat should feel like a lived environment: pressure, density, decisions, and constrained attention.',
+    detail: 'This prototype uses spacing, contrast, and sticky sequencing to create that initial sense of gravity.',
+  },
+  {
+    id: '02',
+    label: 'Orchestration',
+    title: 'Let the page choreograph the argument.',
+    copy: 'Rather than stacking generic sections, the page now moves through deliberate chapters, each with its own pacing and visual emphasis.',
+    detail:
+      'The sticky rail responds as the user scrolls, giving the layout a narrative spine even before real content arrives.',
+  },
+  {
+    id: '03',
+    label: 'Signal',
+    title: 'Use visuals as confidence cues.',
+    copy: 'Investors do not need decoration. They need composure, sharp hierarchy, and signs that the team can present complexity cleanly.',
+    detail: 'The dashboard-like surfaces and motion layers are placeholders for future product or market visuals.',
+  },
+  {
+    id: '04',
+    label: 'Conviction',
+    title: 'End in a calm, high-trust frame.',
+    copy: 'The final sections should feel less like a landing page and more like the closing movement of a vision deck translated to the web.',
+    detail: 'This shell is now ready for sharper narrative copy, proof points, and differentiated clinical insight.',
+  },
+];
 ---
 
 <Layout metadata={metadata}>
-  <!-- Hero Widget ******************* -->
+  <div class="vision-page">
+    <section id="top" class="vision-hero">
+      <div class="vision-halo vision-halo-a"></div>
+      <div class="vision-halo vision-halo-b"></div>
+      <div class="vision-grain"></div>
 
-  <Hero
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-      { text: 'Learn more', href: '#features' },
-    ]}
-    image={{ src: '~/assets/images/hero-image.png', alt: 'AstroWind Hero Image' }}
-  >
-    <Fragment slot="title">
-      Free template for <span class="hidden xl:inline">creating websites with</span>
-      <span class="text-accent dark:text-white"> Astro v6</span> + Tailwind CSS
-    </Fragment>
+      <div class="vision-shell">
+        <div class="vision-copy">
+          <p class="vision-kicker">Narrative Prototype</p>
+          <h1>
+            Designing the shell for a
+            <span>clinician-first investor story</span>
+          </h1>
+          <p class="vision-lede">
+            This version focuses only on atmosphere, pacing, layout, and interaction. The goal is to make the site feel
+            intentional, premium, and scroll-led before real claims and real proof are inserted.
+          </p>
 
-    <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">AstroWind</span> is a free, customizable and production-ready template for Astro v6 +
-        Tailwind CSS v4.</span
-      >
-      <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span>
-      Suitable for Startups, Small Business, SaaS websites, Professional Portfolios, Marketing websites, Landing Pages & Blogs.
-    </Fragment>
-  </Hero>
+          <div class="vision-actions">
+            <a class="vision-button vision-button-primary" href="#story">Begin the sequence</a>
+            <a class="vision-button vision-button-secondary" href="#atmosphere">View the design system</a>
+          </div>
 
-  <!-- Note Widget ******************* -->
+          <div class="vision-statbar">
+            <div class="vision-statcard">
+              <span class="vision-statlabel">Tone</span>
+              <strong>Editorial calm</strong>
+            </div>
+            <div class="vision-statcard">
+              <span class="vision-statlabel">Motion</span>
+              <strong>Scroll-reactive</strong>
+            </div>
+            <div class="vision-statcard">
+              <span class="vision-statlabel">Audience</span>
+              <strong>Clinician investors</strong>
+            </div>
+          </div>
+        </div>
 
-  <Note title="Philosophy:" description="Simplicity, Best Practices and High Performance" />
+        <div class="vision-stage-wrap">
+          <div class="vision-stage" data-hero-stage>
+            <div class="vision-stage-grid"></div>
+            <div class="vision-stage-beam" data-parallax="10"></div>
+            <div class="vision-stage-ring vision-stage-ring-a" data-parallax="-18"></div>
+            <div class="vision-stage-ring vision-stage-ring-b" data-parallax="14"></div>
 
-  <!-- Features Widget *************** -->
+            <div class="vision-floatcard vision-floatcard-a" data-parallax="18">
+              <span class="vision-pill">Scene</span>
+              <strong>Signal density</strong>
+              <p>Layered cues imply complexity without asking the user to read too early.</p>
+            </div>
 
-  <Features
-    id="features"
-    tagline="Features"
-    title="What you get with AstroWind"
-    subtitle="One of the most professional and comprehensive templates currently on the market. Most starred & forked Astro theme in 2022, 2023, 2024 and 2025."
-    items={[
-      {
-        title: 'Astro + Tailwind CSS Integration',
-        description:
-          'A seamless integration between two great frameworks that offer high productivity, performance and versatility. Now powered by Tailwind CSS v4.',
-        icon: 'tabler:brand-tailwind',
-      },
-      {
-        title: 'Ready-to-use Components',
-        description:
-          'Widgets made with Tailwind CSS v4 ready to be used in Marketing Websites, SaaS, Blogs, Personal Profiles, Small Business...',
-        icon: 'tabler:components',
-      },
-      {
-        title: 'Best Practices',
-        description:
-          'Creating secure, efficient, and user-friendly websites that deliver exceptional experiences and lasting value.',
-        icon: 'tabler:list-check',
-      },
-      {
-        title: 'Excellent Page Speed',
-        description:
-          'Having a good page speed impacts organic search ranking, improves user experience (UI/UX) and increase conversion rates.',
-        icon: 'tabler:rocket',
-      },
-      {
-        title: 'Search Engine Optimization (SEO)',
-        description:
-          "SEO lies in its ability to enhance a website's visibility, driving organic traffic and enabling it to reach a wider audience.",
-        icon: 'tabler:arrows-right-left',
-      },
-      {
-        title: 'Open to new ideas and contributions',
-        description:
-          'Embracing a culture that is open to new ideas and contributions is integral fostering innovation, collaboration, and a dynamic user experience.',
-        icon: 'tabler:bulb',
-      },
-    ]}
-  />
+            <div class="vision-floatcard vision-floatcard-b" data-parallax="-12">
+              <span class="vision-pill vision-pill-alt">Motion</span>
+              <strong>Soft tracking</strong>
+              <p>Pointer drift and scroll-state changes add life while staying restrained.</p>
+            </div>
 
-  <!-- Content Widget **************** -->
+            <div class="vision-dashboard" data-parallax="7">
+              <div class="vision-dashboard-top">
+                <span>Clinical workflow model</span>
+                <span>Layer 01</span>
+              </div>
 
-  <Content
-    isReversed
-    tagline="Inside template"
-    title="AstroWind's Blueprint: Fun Meets Functionality!"
-    items={[
-      {
-        title: 'Built on top of Astro v6',
-        description:
-          'Benefiting from the performance and developer-friendly features of this modern static site generator.',
-      },
-      {
-        title: 'Styled using Tailwind CSS v4',
-        description:
-          'Facilitating rapid design and consistent styling with this highly popular utility-first CSS framework.',
-      },
-      {
-        title: 'Cross-browser compatibility',
-        description:
-          'Ensure your website looks and functions consistently across various web browsers, delivering a seamless experience to all users.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Colorful Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Building on modern foundations</h3>
-      Gain a competitive advantage by incorporating industry leading practices
-    </Fragment>
+              <div class="vision-dashboard-main">
+                <div class="vision-dashboard-column">
+                  <div class="vision-mini-panel">
+                    <span class="vision-mini-label">Narrative arc</span>
+                    <div class="vision-wave">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+                  <div class="vision-mini-panel vision-mini-panel-dark">
+                    <span class="vision-mini-label">Trust cues</span>
+                    <div class="vision-bars">
+                      <span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+                </div>
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
+                <div class="vision-dashboard-column vision-dashboard-center">
+                  <div class="vision-orbit">
+                    <span class="vision-orbit-core"></span>
+                    <span class="vision-orbit-node vision-node-a"></span>
+                    <span class="vision-orbit-node vision-node-b"></span>
+                    <span class="vision-orbit-node vision-node-c"></span>
+                  </div>
+                </div>
+              </div>
 
-  <!-- Content Widget **************** -->
+              <div class="vision-dashboard-footer">
+                <div>
+                  <span class="vision-mini-label">Pacing</span>
+                  <strong>Deliberate</strong>
+                </div>
+                <div>
+                  <span class="vision-mini-label">Presentation</span>
+                  <strong>High-trust</strong>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <Content
-    isAfterContent
-    items={[
-      {
-        title: 'High level of customization',
-        description: `Tailor the template effortlessly to match your brand's identity and requirements, making your website distinct and saving you time.`,
-      },
-      {
-        title: 'Multiple layout possibilities',
-        description:
-          'Explore various layout options to find the structure that best presents your content, enhancing user engagement and navigation.',
-      },
-      {
-        title: 'Fully responsive design',
-        description:
-          "Ensure your website's optimal performance on various devices and screen sizes, providing a consistent and enjoyable user experience.",
-      },
-      {
-        title: 'Integration of media',
-        description:
-          'Seamlessly incorporate images, videos, and multimedia elements that enhance your content and engage visitors effectively.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2194&q=80',
-      alt: 'Blueprint Image',
-    }}
-  >
-    <Fragment slot="content">Ensure your online presence truly represents you.</Fragment>
+          <a class="vision-scrollcue" href="#story">
+            <span></span>
+            Scroll to move through the chapters
+          </a>
+        </div>
+      </div>
+    </section>
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
+    <section id="story" class="vision-story">
+      <div class="vision-container">
+        <div class="vision-section-head">
+          <p class="vision-section-kicker">Scroll-led structure</p>
+          <h2>The page now behaves like a guided sequence.</h2>
+          <p>
+            The content is still provisional, but the layout already creates a progression: setup, movement, signal, and
+            landing. That matters when the product itself is still a vision.
+          </p>
+        </div>
 
-  <!-- Content Widget **************** -->
+        <div class="vision-story-grid">
+          <div class="vision-rail-column">
+            <div class="vision-rail-card" data-story-visual data-active-stage="01">
+              <div class="vision-rail-topline">
+                <span class="vision-pill">Sticky visual</span>
+                <span>Scroll state</span>
+              </div>
 
-  <Content
-    isReversed
-    isAfterContent
-    items={[
-      {
-        title: 'Enhanced user engagement',
-        description:
-          'Captivate your audience with interactive elements, intuitive navigation, and visually appealing layouts, encouraging longer visits.',
-      },
-      {
-        title: 'Continuous improvement',
-        description:
-          'Ensure your website stays aligned with the latest trends and technologies through regular updates and enhancements.',
-      },
-      {
-        title: 'Time and resource efficiency',
-        description:
-          'Skip the time-consuming process of building a website from scratch and launch your online presence sooner with AstroWind.',
-      },
-      {
-        title: 'Community support',
-        description: `Join the growing AstroWind community for insights, resources, and assistance, ensuring you're never alone on your web development journey.`,
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Astronauts Image',
-    }}
-  >
-    <Fragment slot="content">Designed to foster growth and success.</Fragment>
+              <div class="vision-rail-display">
+                <div class="vision-rail-line"></div>
+                {
+                  chapters.map((chapter, index) => (
+                    <div class="vision-stage-stop" data-stage-stop={chapter.id} style={`--stop-index:${index + 1}`}>
+                      <span>{chapter.id}</span>
+                      <small>{chapter.label}</small>
+                    </div>
+                  ))
+                }
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
+                <div class="vision-stage-panels">
+                  {
+                    chapters.map((chapter) => (
+                      <div class="vision-stage-panel" data-stage-panel={chapter.id}>
+                        <span class="vision-stage-panel-id">{chapter.id}</span>
+                        <h3>{chapter.title}</h3>
+                        <p>{chapter.copy}</p>
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <!-- Steps Widget ****************** -->
+          <div class="vision-chapter-column">
+            {
+              chapters.map((chapter) => (
+                <article class="vision-chapter" data-stage-card={chapter.id}>
+                  <div class="vision-chapter-panel">
+                    <div class="vision-chapter-index">{chapter.id}</div>
+                    <div class="vision-chapter-copy">
+                      <p class="vision-chapter-label">{chapter.label}</p>
+                      <h3>{chapter.title}</h3>
+                      <p>{chapter.copy}</p>
+                      <p>{chapter.detail}</p>
+                    </div>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <Steps
-    title="Get your dream website up and running in no time with AstroWind."
-    items={[
-      {
-        title: 'Step 1: <span class="font-medium">Download</span>',
-        description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</span>',
-        description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
-        icon: 'tabler:check',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
-  />
+    <section id="atmosphere" class="vision-atmosphere">
+      <div class="vision-container">
+        <div class="vision-section-head vision-section-head-light">
+          <p class="vision-section-kicker">Aesthetic building blocks</p>
+          <h2>Four easy tricks that make the prototype feel more credible.</h2>
+          <p>
+            Depth, editorial typography, sticky sequencing, and visual surfaces do more here than placeholder copy ever
+            could.
+          </p>
+        </div>
 
-  <!-- Features2 Widget ************** -->
+        <div class="vision-bento">
+          <article class="vision-tile vision-tile-large">
+            <span class="vision-tile-label">Layering</span>
+            <h3>Soft glass, not glossy noise.</h3>
+            <p>
+              Partial transparency, blur, and radial highlights create separation without turning the page into a toy.
+            </p>
+            <div class="vision-scanfield">
+              <span></span><span></span><span></span>
+            </div>
+          </article>
 
-  <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS v4"
-    tagline="Components"
-    items={[
-      {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
-        icon: 'flat-color-icons:template',
-      },
-      {
-        title: 'Heros',
-        description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
-      },
-      {
-        title: 'Features',
-        description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
-        icon: 'flat-color-icons:approval',
-      },
-      {
-        title: 'Content',
-        description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
-        icon: 'flat-color-icons:document',
-      },
-      {
-        title: 'Call-to-Action',
-        description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
-      },
-      {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
-        icon: 'flat-color-icons:currency-exchange',
-      },
-      {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
-        icon: 'flat-color-icons:voice-presentation',
-      },
-      {
-        title: 'Contact',
-        description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
-        icon: 'flat-color-icons:business-contact',
-      },
-      {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
+          <article class="vision-tile vision-tile-tall">
+            <span class="vision-tile-label">Typography</span>
+            <h3>Serif headlines carry conviction.</h3>
+            <p>
+              A serif display for the main statements and a quiet sans for support copy instantly removes the template
+              feel.
+            </p>
+          </article>
 
-  <!-- HighlightedPosts Widget ******* -->
+          <article class="vision-tile">
+            <span class="vision-tile-label">Scroll</span>
+            <h3>Sticky sections guide attention.</h3>
+            <p>
+              The rail stays in view while chapters pass, which makes the narrative feel authored rather than stacked.
+            </p>
+          </article>
 
-  <BlogLatestPosts
-    title="Find out more content in our Blog"
-    information={`The blog is used to display AstroWind documentation.
-                        Each new article will be an important step that you will need to know to be an expert in creating a website using Astro v6 + Tailwind CSS v4.
-                        Astro is a very interesting technology. Thanks.
-                `}
-  />
+          <article class="vision-tile vision-tile-accent">
+            <span class="vision-tile-label">Motion</span>
+            <h3>Micro-interaction over spectacle.</h3>
+            <p>
+              Pointer drift, subtle pulsing, and scroll-state changes keep the page alive without undermining trust.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-  <!-- FAQs Widget ******************* -->
+    <section id="status" class="vision-status">
+      <div class="vision-container">
+        <div class="vision-status-panel">
+          <div class="vision-status-copy">
+            <p class="vision-section-kicker">Prototype chassis</p>
+            <h2>The visual language is now strong enough to receive real proof later.</h2>
+            <p>
+              The next pass does not need more effects. It needs sharper claims, product screenshots, clinical workflow
+              diagrams, and evidence arranged inside this structure.
+            </p>
+          </div>
 
-  <FAQs
-    title="Frequently Asked Questions"
-    subtitle="Dive into the following questions to gain insights into the powerful features that AstroWind offers and how it can elevate your web development journey."
-    tagline="FAQs"
-    classes={{ container: 'max-w-6xl' }}
-    items={[
-      {
-        title: 'Why AstroWind?',
-        description:
-          "Michael Knight a young loner on a crusade to champion the cause of the innocent. The helpless. The powerless in a world of criminals who operate above the law. Here he comes Here comes Speed Racer. He's a demon on wheels.",
-      },
-      {
-        title: 'What do I need to start?',
-        description:
-          'Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds. Many say exploration is part of our destiny, but it’s actually our duty to future generations.',
-      },
-      {
-        title: 'How to install the Astro + Tailwind CSS template?',
-        description:
-          "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows.",
-      },
-      {
-        title: "What's something that you don't understand?",
-        description:
-          "A flower in my garden, a mystery in my panties. Heart attack never stopped old Big Bear. I didn't even know we were calling him Big Bear.",
-      },
-      {
-        title: 'What is something that you would like to try again?',
-        description:
-          "A business big enough that it could be listed on the NASDAQ goes belly up. Disappears! It ceases to exist without me. No, you clearly don't know who you're talking to, so let me clue you in.",
-      },
-      {
-        title: 'If you could only ask one question to each person you meet, what would that question be?',
-        description:
-          "This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that's certainly good to know. About four years. I got tired of hearing how young I looked.",
-      },
-    ]}
-  />
+          <div class="vision-status-meters">
+            <div class="vision-meter">
+              <span>Story pacing</span>
+              <strong>82%</strong>
+            </div>
+            <div class="vision-meter">
+              <span>Visual trust</span>
+              <strong>76%</strong>
+            </div>
+            <div class="vision-meter">
+              <span>Motion restraint</span>
+              <strong>91%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- Stats Widget ****************** -->
-
-  <Stats
-    stats={[
-      { title: 'Downloads', amount: '132K' },
-      { title: 'Stars', amount: '24.8K' },
-      { title: 'Forks', amount: '10.3K' },
-      { title: 'Users', amount: '48.4K' },
-    ]}
-  />
-
-  <!-- CallToAction Widget *********** -->
-
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-    ]}
-  >
-    <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
-    </Fragment>
-
-    <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
-    </Fragment>
-  </CallToAction>
+    <section id="finale" class="vision-finale">
+      <div class="vision-container">
+        <div class="vision-finale-panel">
+          <p class="vision-section-kicker">Ready for content</p>
+          <h2>A better stage for the real story.</h2>
+          <p>
+            This homepage is no longer a basic template swap. It is now a design-led prototype intended to hold an
+            investor narrative with more confidence.
+          </p>
+          <div class="vision-actions vision-actions-center">
+            <a class="vision-button vision-button-primary" href="#top">Back to prelude</a>
+            <a class="vision-button vision-button-secondary" href="#story">Review the sequence</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </Layout>
+
+<script>
+  import '~/scripts/vision-homepage';
+</script>
+
+<style is:global>
+  .vision-page {
+    background: linear-gradient(180deg, #f5f4ef 0%, #eef4f2 18%, #f9f7f1 42%, #f5f0e8 60%, #071523 100%);
+    color: rgb(14 23 36);
+  }
+
+  .vision-container,
+  .vision-shell {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+
+  .vision-hero {
+    position: relative;
+    overflow: clip;
+    padding: 8.5rem 0 5rem;
+  }
+
+  .vision-grain,
+  .vision-halo {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .vision-grain {
+    opacity: 0.18;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.24)),
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45) 0, transparent 26%),
+      radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.18) 0, transparent 18%);
+    mix-blend-mode: soft-light;
+  }
+
+  .vision-halo-a {
+    background: radial-gradient(circle at 18% 24%, rgba(105, 194, 190, 0.32), transparent 30%);
+  }
+
+  .vision-halo-b {
+    background: radial-gradient(circle at 82% 18%, rgba(223, 160, 113, 0.34), transparent 24%);
+  }
+
+  .vision-shell {
+    position: relative;
+    display: grid;
+    gap: 3rem;
+    align-items: center;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  }
+
+  .vision-copy {
+    position: relative;
+    z-index: 2;
+  }
+
+  .vision-kicker,
+  .vision-section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin: 0 0 1.25rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid rgba(11, 86, 95, 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    color: rgb(20 99 110);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    backdrop-filter: blur(18px);
+  }
+
+  .vision-copy h1,
+  .vision-section-head h2,
+  .vision-status-copy h2,
+  .vision-finale-panel h2 {
+    font-family: var(--aw-font-heading);
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    line-height: 0.95;
+    color: rgb(12 24 39);
+    text-wrap: balance;
+  }
+
+  .vision-copy h1 {
+    margin: 0;
+    font-size: clamp(3.4rem, 7vw, 6.55rem);
+  }
+
+  .vision-copy h1 span {
+    display: block;
+    color: rgb(20 99 110);
+  }
+
+  .vision-lede,
+  .vision-section-head p,
+  .vision-status-copy p,
+  .vision-finale-panel p {
+    max-width: 42rem;
+    margin: 1.5rem 0 0;
+    font-size: clamp(1.05rem, 1.8vw, 1.22rem);
+    line-height: 1.7;
+    color: rgba(33, 47, 61, 0.82);
+  }
+
+  .vision-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 2rem;
+  }
+
+  .vision-actions-center {
+    justify-content: center;
+  }
+
+  .vision-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.35rem;
+    padding: 0.9rem 1.35rem;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease,
+      border-color 180ms ease,
+      color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  .vision-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .vision-button-primary {
+    background: linear-gradient(135deg, rgb(16 91 102), rgb(12 129 140));
+    color: white;
+    box-shadow: 0 16px 40px -18px rgba(10, 90, 100, 0.5);
+  }
+
+  .vision-button-secondary {
+    border-color: rgba(13, 67, 78, 0.14);
+    background: rgba(255, 255, 255, 0.72);
+    color: rgb(14 23 36);
+    backdrop-filter: blur(18px);
+  }
+
+  .vision-statbar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 2.2rem;
+  }
+
+  .vision-statcard,
+  .vision-floatcard,
+  .vision-chapter-panel,
+  .vision-tile,
+  .vision-status-panel,
+  .vision-finale-panel,
+  .vision-rail-card {
+    border: 1px solid rgba(12, 70, 78, 0.1);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 22px 65px -40px rgba(14, 42, 51, 0.45);
+  }
+
+  .vision-statcard {
+    padding: 1rem 1.1rem;
+    border-radius: 1.4rem;
+  }
+
+  .vision-statlabel,
+  .vision-mini-label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(34, 54, 70, 0.62);
+  }
+
+  .vision-statcard strong {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: 1rem;
+    letter-spacing: -0.03em;
+    color: rgb(14 23 36);
+  }
+
+  .vision-stage-wrap {
+    position: relative;
+  }
+
+  .vision-stage {
+    position: relative;
+    min-height: 38rem;
+    padding: 1rem;
+    border-radius: 2.25rem;
+    overflow: hidden;
+    background:
+      linear-gradient(155deg, rgba(255, 255, 255, 0.8), rgba(212, 233, 230, 0.45) 45%, rgba(224, 202, 186, 0.42)),
+      linear-gradient(180deg, rgba(8, 24, 40, 0.04), rgba(8, 24, 40, 0.12));
+    border: 1px solid rgba(11, 65, 73, 0.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 38px 80px -42px rgba(10, 32, 41, 0.45);
+  }
+
+  .vision-stage-grid,
+  .vision-stage-beam,
+  .vision-stage-ring {
+    position: absolute;
+    inset: 0;
+  }
+
+  .vision-stage-grid {
+    background-image:
+      linear-gradient(rgba(13, 71, 79, 0.075) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13, 71, 79, 0.075) 1px, transparent 1px);
+    background-size: 3.5rem 3.5rem;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.86), transparent);
+  }
+
+  .vision-stage-beam {
+    background: radial-gradient(circle at 56% 50%, rgba(255, 255, 255, 0.86), transparent 28%);
+    filter: blur(3px);
+  }
+
+  .vision-stage-ring {
+    border-radius: 999px;
+    border: 1px solid rgba(31, 102, 112, 0.18);
+  }
+
+  .vision-stage-ring-a {
+    inset: 12% auto auto 8%;
+    width: 16rem;
+    height: 16rem;
+  }
+
+  .vision-stage-ring-b {
+    inset: auto 7% 10% auto;
+    width: 11rem;
+    height: 11rem;
+  }
+
+  .vision-dashboard {
+    position: absolute;
+    inset: 5.3rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.3rem;
+    border-radius: 1.9rem;
+    background: linear-gradient(180deg, rgba(7, 23, 38, 0.92), rgba(16, 38, 58, 0.88));
+    color: rgba(241, 248, 250, 0.92);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 300ms ease;
+  }
+
+  .vision-dashboard-top,
+  .vision-dashboard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(216, 233, 236, 0.62);
+  }
+
+  .vision-dashboard-main {
+    display: grid;
+    grid-template-columns: 1fr 0.86fr;
+    gap: 1rem;
+    flex: 1;
+  }
+
+  .vision-dashboard-column {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .vision-mini-panel {
+    padding: 1rem;
+    border-radius: 1.35rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .vision-mini-panel-dark {
+    background: linear-gradient(180deg, rgba(30, 169, 173, 0.15), rgba(14, 59, 72, 0.22));
+  }
+
+  .vision-wave,
+  .vision-bars {
+    display: flex;
+    align-items: end;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    min-height: 6rem;
+  }
+
+  .vision-wave span,
+  .vision-bars span {
+    flex: 1 1 0;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(121, 238, 232, 0.96), rgba(40, 160, 171, 0.24));
+  }
+
+  .vision-wave span:nth-child(1) {
+    height: 36%;
+  }
+  .vision-wave span:nth-child(2) {
+    height: 64%;
+  }
+  .vision-wave span:nth-child(3) {
+    height: 100%;
+  }
+  .vision-wave span:nth-child(4) {
+    height: 58%;
+  }
+  .vision-wave span:nth-child(5) {
+    height: 44%;
+  }
+
+  .vision-bars span:nth-child(1) {
+    height: 26%;
+  }
+  .vision-bars span:nth-child(2) {
+    height: 88%;
+  }
+  .vision-bars span:nth-child(3) {
+    height: 54%;
+  }
+  .vision-bars span:nth-child(4) {
+    height: 68%;
+  }
+
+  .vision-dashboard-center {
+    place-items: center;
+  }
+
+  .vision-orbit {
+    position: relative;
+    width: min(17rem, 100%);
+    aspect-ratio: 1;
+    border-radius: 999px;
+    border: 1px solid rgba(132, 231, 223, 0.2);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(120, 229, 219, 0.14), transparent 36%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  }
+
+  .vision-orbit::before,
+  .vision-orbit::after {
+    content: '';
+    position: absolute;
+    inset: 14%;
+    border-radius: inherit;
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+  }
+
+  .vision-orbit::after {
+    inset: 30%;
+    border-style: solid;
+    border-color: rgba(228, 166, 118, 0.28);
+  }
+
+  .vision-orbit-core {
+    position: absolute;
+    inset: 50%;
+    width: 3.7rem;
+    height: 3.7rem;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    background: radial-gradient(circle at 35% 35%, white, rgba(117, 240, 231, 0.8));
+    box-shadow: 0 0 0 1.2rem rgba(94, 206, 197, 0.08);
+  }
+
+  .vision-orbit-node {
+    position: absolute;
+    width: 0.95rem;
+    height: 0.95rem;
+    border-radius: 999px;
+    background: rgb(237 188 149);
+    box-shadow: 0 0 0 0.45rem rgba(237, 188, 149, 0.15);
+  }
+
+  .vision-node-a {
+    top: 20%;
+    left: 68%;
+  }
+  .vision-node-b {
+    top: 58%;
+    left: 14%;
+  }
+  .vision-node-c {
+    top: 75%;
+    left: 60%;
+  }
+
+  .vision-floatcard {
+    position: absolute;
+    width: min(15rem, 42%);
+    padding: 1rem 1.05rem 1.1rem;
+    border-radius: 1.35rem;
+    transition: transform 300ms ease;
+  }
+
+  .vision-floatcard strong {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: rgb(16 28 43);
+  }
+
+  .vision-floatcard p {
+    margin: 0.5rem 0 0;
+    font-size: 0.86rem;
+    line-height: 1.55;
+    color: rgba(33, 47, 61, 0.72);
+  }
+
+  .vision-floatcard-a {
+    top: 1.4rem;
+    left: 1.3rem;
+  }
+
+  .vision-floatcard-b {
+    right: 1.4rem;
+    bottom: 1.5rem;
+  }
+
+  .vision-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.62rem;
+    border-radius: 999px;
+    background: rgba(17, 119, 129, 0.12);
+    color: rgb(15 95 105);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .vision-pill-alt {
+    background: rgba(193, 119, 73, 0.12);
+    color: rgb(156 82 44);
+  }
+
+  .vision-scrollcue {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.3rem;
+    color: rgba(25, 56, 67, 0.72);
+    font-size: 0.86rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .vision-scrollcue span {
+    display: inline-flex;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    border: 1px solid rgba(18, 88, 98, 0.28);
+    position: relative;
+  }
+
+  .vision-scrollcue span::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0.22rem;
+    width: 0.22rem;
+    height: 0.22rem;
+    border-radius: 999px;
+    background: rgb(18 88 98);
+    transform: translateX(-50%);
+    animation: visionScrollDot 1.8s ease infinite;
+  }
+
+  .vision-story,
+  .vision-atmosphere,
+  .vision-status,
+  .vision-finale {
+    position: relative;
+    padding: 2.5rem 0 0;
+  }
+
+  .vision-story {
+    padding-top: 4rem;
+  }
+
+  .vision-section-head {
+    max-width: 44rem;
+    margin-bottom: 2rem;
+  }
+
+  .vision-section-head h2,
+  .vision-status-copy h2,
+  .vision-finale-panel h2 {
+    margin: 0;
+    font-size: clamp(2.4rem, 4vw, 4.6rem);
+  }
+
+  .vision-story-grid {
+    display: grid;
+    align-items: start;
+    gap: 2.5rem;
+    grid-template-columns: minmax(18rem, 0.88fr) minmax(0, 1.12fr);
+  }
+
+  .vision-rail-card {
+    position: sticky;
+    top: 6.8rem;
+    padding: 1.2rem;
+    border-radius: 2rem;
+  }
+
+  .vision-rail-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.77rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(26, 57, 68, 0.62);
+  }
+
+  .vision-rail-display {
+    position: relative;
+    min-height: 34rem;
+    padding: 1rem;
+    border-radius: 1.45rem;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at top, rgba(101, 189, 187, 0.24), transparent 40%),
+      linear-gradient(180deg, rgba(245, 252, 250, 0.96), rgba(223, 233, 229, 0.72));
+    border: 1px solid rgba(11, 64, 73, 0.08);
+  }
+
+  .vision-rail-line {
+    position: absolute;
+    left: 2.35rem;
+    top: 4rem;
+    bottom: 4rem;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(16, 101, 111, 0.05), rgba(16, 101, 111, 0.42), rgba(16, 101, 111, 0.06));
+  }
+
+  .vision-stage-stop {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 0.2rem;
+    grid-template-columns: 3.1rem 1fr;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-left: 0.15rem;
+    transition:
+      transform 240ms ease,
+      opacity 240ms ease;
+    opacity: 0.5;
+  }
+
+  .vision-stage-stop span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    border: 1px solid rgba(16, 101, 111, 0.18);
+    background: rgba(255, 255, 255, 0.78);
+    font-size: 0.74rem;
+    font-weight: 800;
+    color: rgb(18 88 98);
+  }
+
+  .vision-stage-stop small {
+    font-size: 0.82rem;
+    letter-spacing: 0.03em;
+    color: rgba(30, 46, 58, 0.72);
+    text-transform: uppercase;
+  }
+
+  .vision-stage-panels {
+    position: absolute;
+    inset: auto 1rem 1rem 7rem;
+    min-height: 13rem;
+  }
+
+  .vision-stage-panel {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    padding: 1.3rem;
+    border-radius: 1.4rem;
+    background: linear-gradient(180deg, rgba(12, 34, 53, 0.94), rgba(12, 43, 64, 0.84));
+    color: rgba(232, 242, 247, 0.92);
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+    transition:
+      opacity 260ms ease,
+      transform 260ms ease;
+  }
+
+  .vision-stage-panel-id {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: rgba(121, 232, 225, 0.78);
+  }
+
+  .vision-stage-panel h3 {
+    margin: 0;
+    font-family: var(--aw-font-heading);
+    font-size: 1.6rem;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  .vision-stage-panel p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: rgba(228, 239, 244, 0.74);
+  }
+
+  .vision-rail-card[data-active-stage='01'] [data-stage-stop='01'],
+  .vision-rail-card[data-active-stage='02'] [data-stage-stop='02'],
+  .vision-rail-card[data-active-stage='03'] [data-stage-stop='03'],
+  .vision-rail-card[data-active-stage='04'] [data-stage-stop='04'] {
+    transform: translateX(0.35rem);
+    opacity: 1;
+  }
+
+  .vision-rail-card[data-active-stage='01'] [data-stage-stop='01'] span,
+  .vision-rail-card[data-active-stage='02'] [data-stage-stop='02'] span,
+  .vision-rail-card[data-active-stage='03'] [data-stage-stop='03'] span,
+  .vision-rail-card[data-active-stage='04'] [data-stage-stop='04'] span {
+    background: linear-gradient(135deg, rgb(14 91 101), rgb(18 133 145));
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 12px 24px -14px rgba(8, 95, 104, 0.6);
+  }
+
+  .vision-rail-card[data-active-stage='01'] [data-stage-panel='01'],
+  .vision-rail-card[data-active-stage='02'] [data-stage-panel='02'],
+  .vision-rail-card[data-active-stage='03'] [data-stage-panel='03'],
+  .vision-rail-card[data-active-stage='04'] [data-stage-panel='04'] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .vision-chapter {
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+  }
+
+  .vision-chapter-panel {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.2rem;
+    width: 100%;
+    padding: 1.4rem;
+    border-radius: 2rem;
+  }
+
+  .vision-chapter-index {
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 3.4rem;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: rgb(18 88 98);
+    text-transform: uppercase;
+  }
+
+  .vision-chapter-label {
+    margin: 0;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgb(18 88 98);
+  }
+
+  .vision-chapter-copy h3 {
+    margin: 0.45rem 0 0;
+    font-family: var(--aw-font-heading);
+    font-size: clamp(2rem, 3vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: rgb(11 24 38);
+  }
+
+  .vision-chapter-copy p {
+    margin: 1rem 0 0;
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: rgba(33, 47, 61, 0.82);
+  }
+
+  .vision-atmosphere {
+    padding-top: 5rem;
+  }
+
+  .vision-section-head-light h2,
+  .vision-section-head-light p,
+  .vision-finale-panel h2,
+  .vision-finale-panel p {
+    color: white;
+  }
+
+  .vision-section-head-light .vision-section-kicker,
+  .vision-finale-panel .vision-section-kicker {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(223, 239, 243, 0.88);
+  }
+
+  .vision-bento {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .vision-tile {
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    border-radius: 1.9rem;
+    grid-column: span 4 / span 4;
+    min-height: 16rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)), rgba(11, 28, 43, 0.62);
+    color: rgba(229, 238, 243, 0.92);
+  }
+
+  .vision-tile-large {
+    grid-column: span 7 / span 7;
+    min-height: 18rem;
+  }
+
+  .vision-tile-tall {
+    grid-column: span 5 / span 5;
+  }
+
+  .vision-tile-accent {
+    background: linear-gradient(180deg, rgba(240, 149, 90, 0.26), rgba(255, 255, 255, 0.04)), rgba(16, 30, 43, 0.72);
+  }
+
+  .vision-tile::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(133, 230, 222, 0.16), transparent 34%);
+    pointer-events: none;
+  }
+
+  .vision-tile-label {
+    display: inline-block;
+    margin-bottom: 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(155, 235, 228, 0.82);
+  }
+
+  .vision-tile h3 {
+    margin: 0;
+    max-width: 18rem;
+    font-family: var(--aw-font-heading);
+    font-size: clamp(1.8rem, 3vw, 2.9rem);
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .vision-tile p {
+    max-width: 24rem;
+    margin: 0.85rem 0 0;
+    font-size: 0.98rem;
+    line-height: 1.75;
+    color: rgba(222, 234, 239, 0.78);
+  }
+
+  .vision-scanfield {
+    position: relative;
+    display: flex;
+    gap: 0.85rem;
+    align-items: end;
+    margin-top: 2rem;
+    min-height: 6.75rem;
+  }
+
+  .vision-scanfield span {
+    flex: 1 1 0;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(128, 239, 232, 0.9), rgba(128, 239, 232, 0.12));
+    animation: visionFloat 6s ease-in-out infinite;
+  }
+
+  .vision-scanfield span:nth-child(1) {
+    height: 48%;
+    animation-delay: 0s;
+  }
+  .vision-scanfield span:nth-child(2) {
+    height: 100%;
+    animation-delay: 0.8s;
+  }
+  .vision-scanfield span:nth-child(3) {
+    height: 68%;
+    animation-delay: 1.6s;
+  }
+
+  .vision-status {
+    padding-top: 5rem;
+  }
+
+  .vision-status-panel,
+  .vision-finale-panel {
+    padding: 2rem;
+    border-radius: 2.2rem;
+  }
+
+  .vision-status-panel {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+    grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.75fr);
+  }
+
+  .vision-status-meters {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .vision-meter {
+    position: relative;
+    overflow: hidden;
+    padding: 1.1rem 1.15rem;
+    border-radius: 1.3rem;
+    background: linear-gradient(135deg, rgba(17, 95, 104, 0.1), rgba(255, 255, 255, 0.7));
+    border: 1px solid rgba(13, 77, 86, 0.1);
+  }
+
+  .vision-meter span {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(29, 56, 68, 0.62);
+  }
+
+  .vision-meter strong {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 2rem;
+    letter-spacing: -0.05em;
+    color: rgb(14 23 36);
+  }
+
+  .vision-finale {
+    padding: 5rem 0 5.5rem;
+  }
+
+  .vision-finale-panel {
+    text-align: center;
+    background:
+      radial-gradient(circle at top, rgba(102, 209, 201, 0.18), transparent 28%),
+      linear-gradient(180deg, rgba(8, 21, 34, 0.92), rgba(8, 17, 27, 0.98));
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  @supports (animation-timeline: view()) {
+    .vision-chapter-panel,
+    .vision-tile,
+    .vision-status-panel {
+      animation: visionReveal both linear;
+      animation-timeline: view();
+      animation-range: entry 12% cover 36%;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .vision-shell,
+    .vision-story-grid,
+    .vision-status-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .vision-stage {
+      min-height: 34rem;
+    }
+
+    .vision-rail-card {
+      position: relative;
+      top: 0;
+    }
+
+    .vision-chapter {
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .vision-copy h1 {
+      font-size: clamp(2.9rem, 14vw, 4.4rem);
+    }
+
+    .vision-statbar,
+    .vision-bento {
+      grid-template-columns: 1fr;
+    }
+
+    .vision-tile,
+    .vision-tile-large,
+    .vision-tile-tall {
+      grid-column: auto;
+    }
+
+    .vision-dashboard {
+      inset: 7rem 1rem 1rem;
+    }
+
+    .vision-floatcard {
+      width: auto;
+      max-width: 13rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .vision-hero {
+      padding-top: 7rem;
+    }
+
+    .vision-container,
+    .vision-shell {
+      width: min(100% - 1.25rem, 1200px);
+    }
+
+    .vision-stage {
+      min-height: 29rem;
+    }
+
+    .vision-dashboard-main,
+    .vision-chapter-panel {
+      grid-template-columns: 1fr;
+    }
+
+    .vision-stage-panels {
+      inset: auto 0.75rem 0.75rem 0.75rem;
+      min-height: 11.5rem;
+    }
+
+    .vision-rail-line {
+      left: 1.85rem;
+    }
+
+    .vision-stage-stop {
+      grid-template-columns: 2.7rem 1fr;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vision-scrollcue span::after,
+    .vision-scanfield span {
+      animation: none;
+    }
+
+    .vision-button,
+    .vision-floatcard,
+    .vision-dashboard,
+    .vision-stage-panel,
+    .vision-stage-stop {
+      transition: none;
+    }
+  }
+
+  @keyframes visionReveal {
+    from {
+      opacity: 0;
+      transform: translateY(32px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes visionFloat {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes visionScrollDot {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, 0);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, 0.54rem);
+    }
+  }
+</style>
