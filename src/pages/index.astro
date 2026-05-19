@@ -11,32 +11,29 @@ const chapters = [
     id: '01',
     label: 'Clinical tension',
     title: 'Open with pressure, not product.',
-    copy:
-      'The first scroll beat should feel like a lived environment: pressure, density, decisions, and constrained attention.',
+    copy: 'The first scroll beat should feel like a lived environment: pressure, density, decisions, and constrained attention.',
     detail: 'This prototype uses spacing, contrast, and sticky sequencing to create that initial sense of gravity.',
   },
   {
     id: '02',
     label: 'Orchestration',
     title: 'Let the page choreograph the argument.',
-    copy:
-      'Rather than stacking generic sections, the page now moves through deliberate chapters, each with its own pacing and visual emphasis.',
-    detail: 'The sticky rail responds as the user scrolls, giving the layout a narrative spine even before real content arrives.',
+    copy: 'Rather than stacking generic sections, the page now moves through deliberate chapters, each with its own pacing and visual emphasis.',
+    detail:
+      'The sticky rail responds as the user scrolls, giving the layout a narrative spine even before real content arrives.',
   },
   {
     id: '03',
     label: 'Signal',
     title: 'Use visuals as confidence cues.',
-    copy:
-      'Investors do not need decoration. They need composure, sharp hierarchy, and signs that the team can present complexity cleanly.',
+    copy: 'Investors do not need decoration. They need composure, sharp hierarchy, and signs that the team can present complexity cleanly.',
     detail: 'The dashboard-like surfaces and motion layers are placeholders for future product or market visuals.',
   },
   {
     id: '04',
     label: 'Conviction',
     title: 'End in a calm, high-trust frame.',
-    copy:
-      'The final sections should feel less like a landing page and more like the closing movement of a vision deck translated to the web.',
+    copy: 'The final sections should feel less like a landing page and more like the closing movement of a vision deck translated to the web.',
     detail: 'This shell is now ready for sharper narrative copy, proof points, and differentiated clinical insight.',
   },
 ];
@@ -57,8 +54,8 @@ const chapters = [
             <span>clinician-first investor story</span>
           </h1>
           <p class="vision-lede">
-            This version focuses only on atmosphere, pacing, layout, and interaction. The goal is to make the site
-            feel intentional, premium, and scroll-led before real claims and real proof are inserted.
+            This version focuses only on atmosphere, pacing, layout, and interaction. The goal is to make the site feel
+            intentional, premium, and scroll-led before real claims and real proof are inserted.
           </p>
 
           <div class="vision-actions">
@@ -160,8 +157,8 @@ const chapters = [
           <p class="vision-section-kicker">Scroll-led structure</p>
           <h2>The page now behaves like a guided sequence.</h2>
           <p>
-            The content is still provisional, but the layout already creates a progression: setup, movement, signal,
-            and landing. That matters when the product itself is still a vision.
+            The content is still provisional, but the layout already creates a progression: setup, movement, signal, and
+            landing. That matters when the product itself is still a vision.
           </p>
         </div>
 
@@ -175,40 +172,46 @@ const chapters = [
 
               <div class="vision-rail-display">
                 <div class="vision-rail-line"></div>
-                {chapters.map((chapter, index) => (
-                  <div class="vision-stage-stop" data-stage-stop={chapter.id} style={`--stop-index:${index + 1}`}>
-                    <span>{chapter.id}</span>
-                    <small>{chapter.label}</small>
-                  </div>
-                ))}
+                {
+                  chapters.map((chapter, index) => (
+                    <div class="vision-stage-stop" data-stage-stop={chapter.id} style={`--stop-index:${index + 1}`}>
+                      <span>{chapter.id}</span>
+                      <small>{chapter.label}</small>
+                    </div>
+                  ))
+                }
 
                 <div class="vision-stage-panels">
-                  {chapters.map((chapter) => (
-                    <div class="vision-stage-panel" data-stage-panel={chapter.id}>
-                      <span class="vision-stage-panel-id">{chapter.id}</span>
-                      <h3>{chapter.title}</h3>
-                      <p>{chapter.copy}</p>
-                    </div>
-                  ))}
+                  {
+                    chapters.map((chapter) => (
+                      <div class="vision-stage-panel" data-stage-panel={chapter.id}>
+                        <span class="vision-stage-panel-id">{chapter.id}</span>
+                        <h3>{chapter.title}</h3>
+                        <p>{chapter.copy}</p>
+                      </div>
+                    ))
+                  }
                 </div>
               </div>
             </div>
           </div>
 
           <div class="vision-chapter-column">
-            {chapters.map((chapter) => (
-              <article class="vision-chapter" data-stage-card={chapter.id}>
-                <div class="vision-chapter-panel">
-                  <div class="vision-chapter-index">{chapter.id}</div>
-                  <div class="vision-chapter-copy">
-                    <p class="vision-chapter-label">{chapter.label}</p>
-                    <h3>{chapter.title}</h3>
-                    <p>{chapter.copy}</p>
-                    <p>{chapter.detail}</p>
+            {
+              chapters.map((chapter) => (
+                <article class="vision-chapter" data-stage-card={chapter.id}>
+                  <div class="vision-chapter-panel">
+                    <div class="vision-chapter-index">{chapter.id}</div>
+                    <div class="vision-chapter-copy">
+                      <p class="vision-chapter-label">{chapter.label}</p>
+                      <h3>{chapter.title}</h3>
+                      <p>{chapter.copy}</p>
+                      <p>{chapter.detail}</p>
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -241,20 +244,25 @@ const chapters = [
             <span class="vision-tile-label">Typography</span>
             <h3>Serif headlines carry conviction.</h3>
             <p>
-              A serif display for the main statements and a quiet sans for support copy instantly removes the template feel.
+              A serif display for the main statements and a quiet sans for support copy instantly removes the template
+              feel.
             </p>
           </article>
 
           <article class="vision-tile">
             <span class="vision-tile-label">Scroll</span>
             <h3>Sticky sections guide attention.</h3>
-            <p>The rail stays in view while chapters pass, which makes the narrative feel authored rather than stacked.</p>
+            <p>
+              The rail stays in view while chapters pass, which makes the narrative feel authored rather than stacked.
+            </p>
           </article>
 
           <article class="vision-tile vision-tile-accent">
             <span class="vision-tile-label">Motion</span>
             <h3>Micro-interaction over spectacle.</h3>
-            <p>Pointer drift, subtle pulsing, and scroll-state changes keep the page alive without undermining trust.</p>
+            <p>
+              Pointer drift, subtle pulsing, and scroll-state changes keep the page alive without undermining trust.
+            </p>
           </article>
         </div>
       </div>
@@ -310,70 +318,12 @@ const chapters = [
 </Layout>
 
 <script>
-  // @ts-nocheck
-  const heroStage = /** @type {HTMLElement | null} */ (document.querySelector('[data-hero-stage]'));
-  if (heroStage && window.matchMedia('(pointer: fine)').matches) {
-    const layers = /** @type {NodeListOf<HTMLElement>} */ (heroStage.querySelectorAll('[data-parallax]'));
-
-    const reset = () => {
-      layers.forEach((layer) => {
-        layer.style.transform = 'translate3d(0, 0, 0)';
-      });
-    };
-
-    heroStage.addEventListener('pointermove', (event) => {
-      const pointerEvent = /** @type {PointerEvent} */ (event);
-      const rect = heroStage.getBoundingClientRect();
-      const x = (pointerEvent.clientX - rect.left) / rect.width - 0.5;
-      const y = (pointerEvent.clientY - rect.top) / rect.height - 0.5;
-
-      layers.forEach((layer) => {
-        const depth = Number(layer.getAttribute('data-parallax')) || 0;
-        layer.style.transform = `translate3d(${x * depth}px, ${y * depth}px, 0)`;
-      });
-    });
-
-    heroStage.addEventListener('pointerleave', reset);
-  }
-
-  const stageRoot = /** @type {HTMLElement | null} */ (document.querySelector('[data-story-visual]'));
-  const chapterCards = /** @type {HTMLElement[]} */ (Array.from(document.querySelectorAll('[data-stage-card]')));
-
-  if (stageRoot && chapterCards.length) {
-    /** @param {string} id */
-    const setStage = (id) => {
-      stageRoot.dataset.activeStage = id;
-    };
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((entryA, entryB) => entryB.intersectionRatio - entryA.intersectionRatio)[0];
-
-        if (visible?.target) {
-          setStage(visible.target.getAttribute('data-stage-card') || '01');
-        }
-      },
-      {
-        threshold: [0.35, 0.5, 0.75],
-        rootMargin: '-20% 0px -28% 0px',
-      }
-    );
-
-    chapterCards.forEach((card) => {
-      observer.observe(card);
-      card.addEventListener('mouseenter', () => {
-        setStage(card.getAttribute('data-stage-card') || '01');
-      });
-    });
-  }
+  import '~/scripts/vision-homepage';
 </script>
 
 <style is:global>
   .vision-page {
-    background:
-      linear-gradient(180deg, #f5f4ef 0%, #eef4f2 18%, #f9f7f1 42%, #f5f0e8 60%, #071523 100%);
+    background: linear-gradient(180deg, #f5f4ef 0%, #eef4f2 18%, #f9f7f1 42%, #f5f0e8 60%, #071523 100%);
     color: rgb(14 23 36);
   }
 
@@ -943,7 +893,9 @@ const chapters = [
     align-items: center;
     margin-bottom: 1rem;
     padding-left: 0.15rem;
-    transition: transform 240ms ease, opacity 240ms ease;
+    transition:
+      transform 240ms ease,
+      opacity 240ms ease;
     opacity: 0.5;
   }
 
@@ -986,7 +938,9 @@ const chapters = [
     color: rgba(232, 242, 247, 0.92);
     opacity: 0;
     transform: translateY(12px) scale(0.985);
-    transition: opacity 260ms ease, transform 260ms ease;
+    transition:
+      opacity 260ms ease,
+      transform 260ms ease;
   }
 
   .vision-stage-panel-id {
@@ -1121,9 +1075,7 @@ const chapters = [
     border-radius: 1.9rem;
     grid-column: span 4 / span 4;
     min-height: 16rem;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
-      rgba(11, 28, 43, 0.62);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)), rgba(11, 28, 43, 0.62);
     color: rgba(229, 238, 243, 0.92);
   }
 
@@ -1137,9 +1089,7 @@ const chapters = [
   }
 
   .vision-tile-accent {
-    background:
-      linear-gradient(180deg, rgba(240, 149, 90, 0.26), rgba(255, 255, 255, 0.04)),
-      rgba(16, 30, 43, 0.72);
+    background: linear-gradient(180deg, rgba(240, 149, 90, 0.26), rgba(255, 255, 255, 0.04)), rgba(16, 30, 43, 0.72);
   }
 
   .vision-tile::before {
