@@ -23,12 +23,14 @@ if (heroStage && window.matchMedia('(pointer: fine)').matches) {
   heroStage.addEventListener('pointerleave', resetLayers);
 }
 
-const stageRoot = document.querySelector<HTMLElement>('[data-story-visual]');
-const chapterCards = Array.from(document.querySelectorAll<HTMLElement>('[data-stage-card]'));
+const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section-id]'));
+const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
 
-if (stageRoot && chapterCards.length > 0) {
-  const setStage = (id: string) => {
-    stageRoot.dataset.activeStage = id;
+if (sections.length > 0 && navLinks.length > 0) {
+  const setActiveSection = (id: string) => {
+    navLinks.forEach((link) => {
+      link.dataset.active = String(link.dataset.navLink === id);
+    });
   };
 
   const observer = new IntersectionObserver(
@@ -38,19 +40,14 @@ if (stageRoot && chapterCards.length > 0) {
         .sort((entryA, entryB) => entryB.intersectionRatio - entryA.intersectionRatio)[0];
 
       if (visible?.target instanceof HTMLElement) {
-        setStage(visible.target.dataset.stageCard ?? '01');
+        setActiveSection(visible.target.dataset.sectionId ?? 'top');
       }
     },
     {
-      threshold: [0.35, 0.5, 0.75],
-      rootMargin: '-20% 0px -28% 0px',
+      threshold: [0.2, 0.35, 0.6],
+      rootMargin: '-14% 0px -50% 0px',
     }
   );
 
-  chapterCards.forEach((card) => {
-    observer.observe(card);
-    card.addEventListener('mouseenter', () => {
-      setStage(card.dataset.stageCard ?? '01');
-    });
-  });
+  sections.forEach((section) => observer.observe(section));
 }

@@ -1,5 +1,5 @@
 site:
-  name: Clinician Vision
+  name: Robeaute
   site: 'https://example.com'
   base: '/'
   trailingSlash: false
@@ -9,14 +9,14 @@ site:
 # Default SEO metadata
 metadata:
   title:
-    default: Clinician Vision
-    template: '%s — Clinician Vision'
-  description: 'Design prototype for an investor-facing clinician storytelling website.'
+    default: Robeaute
+    template: '%s — Robeaute'
+  description: 'Design prototype for an investor-facing Robeaute website.'
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: Clinician Vision
+    site_name: Robeaute
     images:
       - url: '~/assets/images/default.png'
         width: 1200
