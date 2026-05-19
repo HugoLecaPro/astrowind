@@ -57,6 +57,12 @@ const benefits = [
   },
 ];
 
+const solutionPoints = [
+  'Real physical agent, not just software',
+  'Minimally invasive multiday navigation',
+  'Localized diagnosis, sensing, and therapy',
+];
+
 const timeline = [
   { label: 'MRI scan #14', time: '07:53 AM' },
   { label: 'Proteomic instability detected', time: '08:15 AM' },
@@ -260,6 +266,37 @@ const roadmap = [
     </section>
 
     <section id="solutions" class="robeaute-benefits" data-section-id="solutions">
+      <div class="robeaute-solution-feature">
+        <div class="robeaute-solution-copy">
+          <p class="robeaute-overline">Solutions</p>
+          <h2>Show the physical agent in motion, not only the clinical promise.</h2>
+          <p>
+            This clip gives patients and investors an immediate read on the product itself: a real microrobot that can
+            navigate, sense, diagnose, and support localized treatment inside the body.
+          </p>
+
+          <div class="robeaute-solution-points">
+            {solutionPoints.map((item) => <span>{item}</span>)}
+          </div>
+
+          <a class="robeaute-secondary-cta" href="/dashboard">
+            Open the clinician dashboard
+            <span><Icon name="tabler:arrow-up-right" class="h-4 w-4" /></span>
+          </a>
+        </div>
+
+        <div class="robeaute-solution-media">
+          <div class="robeaute-solution-video-frame">
+            <video class="robeaute-solution-video" controls autoplay muted loop playsinline preload="metadata">
+              <source src="/media/microrobot-demo.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="robeaute-solution-caption">
+            Microrobot concept video included for the patient-facing solutions narrative.
+          </p>
+        </div>
+      </div>
+
       <div class="robeaute-benefits-shell">
         {
           benefits.map((item) => (
@@ -1128,6 +1165,88 @@ const roadmap = [
     margin-top: -1.6rem;
   }
 
+  .robeaute-solution-feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.96fr);
+    gap: 1.4rem;
+    align-items: center;
+    width: min(1420px, calc(100% - 2rem));
+    margin: 0 auto 1rem;
+    padding: 1.6rem;
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(207, 223, 255, 0.33);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 24px 60px -44px rgba(62, 92, 166, 0.55);
+  }
+
+  .robeaute-solution-copy h2 {
+    margin: 0.7rem 0 0;
+    font-size: clamp(2.1rem, 3vw, 3rem);
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+    color: #1a3479;
+  }
+
+  .robeaute-solution-copy p,
+  .robeaute-solution-caption {
+    margin: 1rem 0 0;
+    font-size: 1.02rem;
+    line-height: 1.75;
+    color: rgba(26, 52, 121, 0.78);
+  }
+
+  .robeaute-solution-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .robeaute-solution-points span {
+    padding: 0.72rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.52);
+    background: rgba(232, 239, 255, 0.58);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #22418b;
+  }
+
+  .robeaute-solution-copy .robeaute-secondary-cta {
+    margin-top: 1.55rem;
+  }
+
+  .robeaute-solution-media {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .robeaute-solution-video-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background:
+      radial-gradient(circle at 18% 20%, rgba(255, 255, 255, 0.32), transparent 32%), rgba(175, 199, 247, 0.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.74),
+      0 24px 60px -44px rgba(62, 92, 166, 0.45);
+  }
+
+  .robeaute-solution-video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: rgba(196, 213, 246, 0.42);
+  }
+
+  .robeaute-solution-caption {
+    margin-top: 0;
+    font-size: 0.92rem;
+  }
+
   .robeaute-benefits-shell {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1441,6 +1560,7 @@ const roadmap = [
   @media (max-width: 1280px) {
     .robeaute-header,
     .robeaute-hero-shell,
+    .robeaute-solution-feature,
     .robeaute-benefits-shell,
     .robeaute-technology-shell,
     .robeaute-roadmap,
@@ -1473,6 +1593,10 @@ const roadmap = [
     .robeaute-roadmap-grid,
     .robeaute-bottom-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .robeaute-solution-feature {
+      grid-template-columns: 1fr;
     }
 
     .robeaute-benefit-card:nth-child(2n) {
@@ -1557,6 +1681,11 @@ const roadmap = [
     .robeaute-roadmap-grid,
     .robeaute-bottom-grid {
       grid-template-columns: 1fr;
+    }
+
+    .robeaute-solution-feature {
+      width: min(100% - 1rem, 1420px);
+      padding: 1.2rem;
     }
 
     .robeaute-benefit-card {

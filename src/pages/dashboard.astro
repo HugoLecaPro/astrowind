@@ -117,7 +117,7 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
               <div class="mission-scrubber-card">
                 <div class="mission-scrubber-top">
                   <div>
-                    <p class="dashboard-overline">Mission replay</p>
+                    <p class="dashboard-overline">Robot mission replay</p>
                     <h3 data-phase-heading>{initialPhase.title}</h3>
                   </div>
                   <span class="mission-phase-pill" data-phase-pill>
@@ -171,7 +171,7 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
                 </label>
                 <label>
                   <span>Brain shell opacity</span>
-                  <input type="range" min="30" max="100" value="72" data-brain-range="opacity" />
+                  <input type="range" min="30" max="100" value="58" data-brain-range="opacity" />
                 </label>
               </section>
 
@@ -212,14 +212,15 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
             </div>
 
             <p class="mission-alert-copy" data-mission-alert-copy>
-              Diagnostic package ready for review. The agent completed its route and halted at the lesion margin with
-              stable local conditions.
+              Diagnostic package ready for review. The deployed robot completed its localized route and halted at the
+              lesion margin with stable local conditions.
             </p>
 
+            <p class="mission-log-label">Case progression</p>
             <ul class="mission-event-log">
               {
                 missionEventLog.map((item, index) => (
-                  <li data-event-log-index={index}>
+                  <li data-event-log-index={index} data-event-phase={item.phaseIndex}>
                     <span>{item.time}</span>
                     <strong>{item.label}</strong>
                   </li>
@@ -237,8 +238,8 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
                 aria-expanded="false"
               >
                 <div>
-                  <p class="dashboard-overline">Mission status</p>
-                  <h3>One route, one lesion, one ready-to-review package</h3>
+                  <p class="dashboard-overline">Robot mission status</p>
+                  <h3>Implantation to diagnosis package, separated from the broader case journey</h3>
                 </div>
                 <span class="workflow-badge" data-mission-summary-badge>{caseSummary.status}</span>
               </button>
@@ -1013,6 +1014,15 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
 
   .mission-alert-copy {
     margin: 0.95rem 0 1rem;
+  }
+
+  .mission-log-label {
+    margin: 0 0 0.75rem;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(24, 48, 109, 0.62);
   }
 
   .mission-event-log,

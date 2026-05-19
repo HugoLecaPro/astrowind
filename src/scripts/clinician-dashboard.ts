@@ -109,7 +109,7 @@ if (canvas) {
   fillLight.position.set(0.2, 0.2, 3.8);
   scene.add(fillLight);
 
-  const lesionLight = new THREE.PointLight(0xffb45e, 6, 5, 2);
+  const lesionLight = new THREE.PointLight(0xff8b5f, 10, 7, 2);
   lesionLight.position.set(...tumorModel.position);
   scene.add(lesionLight);
 
@@ -119,12 +119,13 @@ if (canvas) {
     roughness: 0.3,
     transmission: 0.1,
     transparent: true,
-    opacity: 0.72,
+    opacity: 0.58,
     thickness: 0.9,
     clearcoat: 0.45,
     clearcoatRoughness: 0.2,
     emissive: new THREE.Color(0x6d8dff),
     emissiveIntensity: 0.34,
+    depthWrite: false,
   });
 
   const brainGroup = new THREE.Group();
@@ -147,7 +148,9 @@ if (canvas) {
     new THREE.LineBasicMaterial({
       color: 0xffffff,
       transparent: true,
-      opacity: 0.18,
+      opacity: 0.15,
+      depthTest: false,
+      depthWrite: false,
     })
   );
   const activePath = new THREE.Line(
@@ -156,8 +159,12 @@ if (canvas) {
       color: 0xffed67,
       transparent: true,
       opacity: 0.96,
+      depthTest: false,
+      depthWrite: false,
     })
   );
+  inactivePath.frustumCulled = false;
+  activePath.frustumCulled = false;
 
   const robotCore = new THREE.Mesh(
     new THREE.SphereGeometry(0.055, 24, 24),
@@ -167,6 +174,8 @@ if (canvas) {
       emissiveIntensity: 1.6,
       roughness: 0.16,
       metalness: 0.08,
+      depthTest: false,
+      depthWrite: false,
     })
   );
   const robotHalo = new THREE.Mesh(
@@ -175,6 +184,8 @@ if (canvas) {
       color: 0xffed67,
       transparent: true,
       opacity: 0.22,
+      depthTest: false,
+      depthWrite: false,
     })
   );
   const robotMarker = new THREE.Group();
@@ -212,8 +223,11 @@ if (canvas) {
         roughness: 0.28,
         metalness: 0.05,
         emissive: color,
-        emissiveIntensity: opacity * 0.75,
+        emissiveIntensity: opacity * 1.1,
         clearcoat: 0.22,
+        side: THREE.DoubleSide,
+        depthTest: false,
+        depthWrite: false,
       })
     );
   };
@@ -224,38 +238,48 @@ if (canvas) {
     checkpointBaseScales.length = 0;
 
     const tumorGroup = new THREE.Group();
-    const outerShell = createOrganicSphere(tumorModel.shellRadii[2], 0xffd974, 0.09, 0.8);
-    const midShell = createOrganicSphere(tumorModel.shellRadii[1], 0xffad5d, 0.14, 0.55);
-    const innerShell = createOrganicSphere(tumorModel.shellRadii[0], 0xff7a4c, 0.22, 0.4);
-    const core = createOrganicSphere(tumorModel.coreRadius, 0xff5648, 0.88, 0.2);
+    const outerShell = createOrganicSphere(tumorModel.shellRadii[2], 0xffe6a0, 0.16, 0.8);
+    const midShell = createOrganicSphere(tumorModel.shellRadii[1], 0xffb15b, 0.28, 0.55);
+    const innerShell = createOrganicSphere(tumorModel.shellRadii[0], 0xff7d4a, 0.46, 0.4);
+    const core = createOrganicSphere(tumorModel.coreRadius, 0xff503d, 0.96, 0.2);
+
+    outerShell.renderOrder = 10;
+    midShell.renderOrder = 11;
+    innerShell.renderOrder = 12;
+    core.renderOrder = 13;
 
     tumorGroup.position.set(...tumorModel.position);
     tumorGroup.add(outerShell, midShell, innerShell, core);
     overlayGroup.add(tumorGroup);
 
-    inactivePath.renderOrder = 2;
-    activePath.renderOrder = 3;
+    inactivePath.renderOrder = 20;
+    activePath.renderOrder = 21;
     overlayGroup.add(inactivePath, activePath);
 
     for (const [index, checkpoint] of missionCheckpoints.entries()) {
       const material = new THREE.MeshStandardMaterial({
         color: 0xffe76a,
         emissive: 0xc2a600,
-        emissiveIntensity: 0.7,
+        emissiveIntensity: 1,
         roughness: 0.18,
         metalness: 0.08,
+        depthTest: false,
+        depthWrite: false,
       });
 
       const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.04, 20, 20), material);
       mesh.position.set(...checkpoint.position);
       mesh.userData = { checkpointIndex: index };
+      mesh.renderOrder = 22;
 
       const halo = new THREE.Mesh(
         new THREE.SphereGeometry(0.075, 16, 16),
         new THREE.MeshBasicMaterial({
           color: 0xffee80,
           transparent: true,
-          opacity: 0.12,
+          opacity: 0.18,
+          depthTest: false,
+          depthWrite: false,
         })
       );
       mesh.add(halo);
@@ -265,6 +289,8 @@ if (canvas) {
       overlayGroup.add(mesh);
     }
 
+    robotHalo.renderOrder = 24;
+    robotCore.renderOrder = 25;
     overlayGroup.add(robotMarker);
   };
 
@@ -383,7 +409,7 @@ if (canvas) {
       setText(missionAlertTitle, 'Mission complete');
       setText(
         missionAlertCopy,
-        'Diagnostic package ready for review. The agent completed its route and halted at the lesion margin with stable local conditions.'
+        'Diagnostic package ready for review. The deployed robot completed its localized route and halted at the lesion margin with stable local conditions.'
       );
       setText(missionAlertBadge, 'Review ready');
       setText(missionSummaryBadge, caseSummary.status);
@@ -393,7 +419,7 @@ if (canvas) {
       setText(missionAlertTitle, `Replay mode · ${phase.label}`);
       setText(
         missionAlertCopy,
-        'Diagnostic package remains anchored to the final milestone. Replay is showing how the agent advanced toward the lesion and what it recorded.'
+        'Diagnostic package remains anchored to the final milestone. Replay is showing the deployed robot path after implantation and the evidence gathered en route.'
       );
       setText(missionAlertBadge, 'Replay');
       setText(missionSummaryBadge, phase.status);
@@ -431,8 +457,9 @@ if (canvas) {
       row.dataset.active = index <= phaseIndex ? 'true' : 'false';
     }
 
-    for (const [index, row] of eventRows.entries()) {
-      row.dataset.active = index <= phaseIndex ? 'true' : 'false';
+    for (const row of eventRows) {
+      const eventPhase = Number(row.dataset.eventPhase ?? 0);
+      row.dataset.active = eventPhase <= phaseIndex ? 'true' : 'false';
     }
   };
 
