@@ -1,5 +1,16 @@
 ---
 import { Icon } from 'astro-icon/components';
+import {
+  caseSummary,
+  challengePrompts,
+  dashboardDiagnosis,
+  initialPhaseId,
+  initialTreatmentId,
+  missionCheckpoints,
+  missionEventLog,
+  missionPhases,
+  treatmentOptions,
+} from '~/data/clinicianDashboard';
 import Layout from '~/layouts/PageLayout.astro';
 
 const metadata = {
@@ -17,18 +28,10 @@ const navLinks = [
   { label: 'Careers', href: '/#careers' },
 ];
 
-const biomarkers = [
-  { label: 'Inflammation index', value: '0.24', delta: '-12%' },
-  { label: 'CNS activity coherence', value: '87%', delta: '+5%' },
-  { label: 'Adaptive response signal', value: 'Stable', delta: 'Live' },
-];
-
-const timeline = [
-  { time: '07:53', title: 'MRI scan ingested', copy: 'New structural series aligned with prior session.' },
-  { time: '08:15', title: 'Proteomic anomaly detected', copy: 'AI flagged drift in inflammatory markers.' },
-  { time: '09:42', title: 'Localized nanotherapy prepared', copy: 'Delivery path matched to patient-specific model.' },
-  { time: '11:02', title: 'Response threshold crossed', copy: 'Digital twin predicts therapeutic benefit increase.' },
-];
+const initialPhaseIndex = missionPhases.findIndex((phase) => phase.id === initialPhaseId);
+const initialPhase = missionPhases[initialPhaseIndex];
+const focusedCheckpoint = missionCheckpoints.at(-1)!;
+const selectedTreatment = treatmentOptions.find((item) => item.id === initialTreatmentId) ?? treatmentOptions[0];
 ---
 
 <Layout metadata={metadata}>
@@ -60,17 +63,20 @@ const timeline = [
     <section class="dashboard-shell">
       <div class="dashboard-titlebar">
         <div>
-          <p class="dashboard-kicker">Clinician dashboard</p>
-          <h1>Patient-specific adaptive brain monitoring</h1>
+          <p class="dashboard-kicker">Clinician case workspace</p>
+          <h1>Microrobot-guided diagnosis and treatment review</h1>
           <p class="dashboard-subtitle">
-            Interactive STL rendering on the left, live clinical context and treatment intelligence on the right.
+            One patient, one lesion, one evidence-to-treatment workflow. The left pane shows the agent’s route inside
+            the STL brain. The right pane explains the proposed diagnosis and the treatment choices it unlocks.
           </p>
         </div>
 
         <div class="dashboard-status">
           <span class="dashboard-status-dot"></span>
-          Claire Moreau
-          <small>Adaptive treatment active</small>
+          <strong>{caseSummary.patientName}</strong>
+          <small>
+            {caseSummary.caseTitle} · {caseSummary.status}
+          </small>
         </div>
       </div>
 
@@ -78,32 +84,83 @@ const timeline = [
         <section class="brain-workspace">
           <div class="brain-workspace-top">
             <div>
-              <p class="dashboard-overline">3D brain model</p>
-              <h2>Interactive neural anatomy viewer</h2>
+              <p class="dashboard-overline">3D anatomy workspace</p>
+              <h2>Whole-brain context with lesion, route, and active agent state</h2>
+              <p class="brain-workspace-copy">
+                The STL brain remains the anatomical substrate. The lesion, path checkpoints, and active robot position
+                carry the visual emphasis.
+              </p>
             </div>
 
             <div class="brain-badges">
-              <span>STL loaded</span>
-              <span>Orbit enabled</span>
+              {caseSummary.tags.map((tag) => <span>{tag}</span>)}
             </div>
           </div>
 
           <div class="brain-stage-card">
-            <div class="brain-canvas-wrap">
-              <canvas data-brain-viewer></canvas>
-              <div class="brain-stage-hint">Drag to rotate · Scroll to zoom · Shift + drag to pan</div>
-            </div>
+            <div class="brain-stage-column">
+              <div class="brain-canvas-wrap">
+                <canvas data-brain-viewer></canvas>
 
-            <aside class="brain-gui">
-              <div class="brain-gui-block">
-                <p>View controls</p>
-                <div class="brain-gui-actions">
-                  <button type="button" data-brain-action="reset">Reset view</button>
-                  <button type="button" data-brain-action="focus">Focus brain</button>
+                <div class="brain-stage-legend">
+                  <span><i class="legend-chip legend-chip-core"></i>Lesion core</span>
+                  <span><i class="legend-chip legend-chip-shell"></i>Peritumoral field</span>
+                  <span><i class="legend-chip legend-chip-path"></i>Agent path</span>
+                  <span><i class="legend-chip legend-chip-robot"></i>Active agent</span>
+                </div>
+
+                <div class="brain-stage-hint">
+                  Drag to rotate · Scroll to zoom · Click a checkpoint to inspect its evidence
                 </div>
               </div>
 
-              <div class="brain-gui-block">
+              <div class="mission-scrubber-card">
+                <div class="mission-scrubber-top">
+                  <div>
+                    <p class="dashboard-overline">Mission replay</p>
+                    <h3 data-phase-heading>{initialPhase.title}</h3>
+                  </div>
+                  <span class="mission-phase-pill" data-phase-pill>
+                    {initialPhase.label}
+                  </span>
+                </div>
+
+                <p class="mission-phase-copy" data-phase-copy>
+                  {initialPhase.copy}
+                </p>
+
+                <input
+                  type="range"
+                  min="0"
+                  max={missionPhases.length - 1}
+                  step="1"
+                  value={initialPhaseIndex}
+                  data-mission-scrubber
+                />
+
+                <div class="mission-phase-track">
+                  {
+                    missionPhases.map((phase, index) => (
+                      <button type="button" class="phase-stop" data-phase-button data-phase-index={index}>
+                        <strong>{phase.label}</strong>
+                        <span>{phase.time}</span>
+                      </button>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+
+            <aside class="brain-gui">
+              <section class="brain-gui-block">
+                <p>View controls</p>
+                <div class="brain-gui-actions">
+                  <button type="button" data-brain-action="reset">Whole brain</button>
+                  <button type="button" data-brain-action="focus-lesion">Focus lesion</button>
+                </div>
+              </section>
+
+              <section class="brain-gui-block">
                 <label class="brain-toggle">
                   <span>Auto rotate</span>
                   <input type="checkbox" data-brain-toggle="autorotate" checked />
@@ -112,24 +169,13 @@ const timeline = [
                   <span>Wireframe</span>
                   <input type="checkbox" data-brain-toggle="wireframe" />
                 </label>
-              </div>
+                <label>
+                  <span>Brain shell opacity</span>
+                  <input type="range" min="30" max="100" value="72" data-brain-range="opacity" />
+                </label>
+              </section>
 
-              <div class="brain-gui-block">
-                <label>
-                  <span>Opacity</span>
-                  <input type="range" min="35" max="100" value="88" data-brain-range="opacity" />
-                </label>
-                <label>
-                  <span>Glow intensity</span>
-                  <input type="range" min="0" max="120" value="62" data-brain-range="emissive" />
-                </label>
-                <label>
-                  <span>Rotation speed</span>
-                  <input type="range" min="0" max="100" value="30" data-brain-range="speed" />
-                </label>
-              </div>
-
-              <div class="brain-gui-readout">
+              <section class="brain-gui-readout">
                 <div>
                   <span>Model</span>
                   <strong data-brain-readout="triangles">Loading…</strong>
@@ -138,90 +184,270 @@ const timeline = [
                   <span>Viewport</span>
                   <strong data-brain-readout="viewport">Ready</strong>
                 </div>
-              </div>
+                <div>
+                  <span>Current phase</span>
+                  <strong data-brain-readout="phase">{initialPhase.label}</strong>
+                </div>
+                <div>
+                  <span>Agent location</span>
+                  <strong data-brain-readout="agent">{caseSummary.distanceToCore}</strong>
+                </div>
+              </section>
+
+              <section class="brain-gui-note">
+                <p>Checkpoint selection updates the evidence panel without collapsing the rest of the case.</p>
+              </section>
             </aside>
           </div>
         </section>
 
         <aside class="dashboard-panels">
-          <article class="dashboard-card patient-card">
-            <div class="patient-card-top">
+          <article class="mission-alert">
+            <div class="mission-alert-head">
               <div>
-                <p class="dashboard-overline">Patient context</p>
-                <h2>Claire Moreau</h2>
+                <p class="dashboard-overline">Mission notification</p>
+                <h2 data-mission-alert-title>Mission complete</h2>
               </div>
-              <span class="patient-age">52 years old</span>
+              <span class="mission-alert-badge" data-mission-alert-badge>Review ready</span>
             </div>
 
-            <div class="patient-tags">
-              <span>Continuous CNS monitoring</span>
-              <span>Localized adaptive therapy</span>
-              <span>Digital twin active</span>
-            </div>
-          </article>
+            <p class="mission-alert-copy" data-mission-alert-copy>
+              Diagnostic package ready for review. The agent completed its route and halted at the lesion margin with
+              stable local conditions.
+            </p>
 
-          <article class="dashboard-card biomarker-card">
-            <div class="card-head">
-              <div>
-                <p class="dashboard-overline">Biomarkers</p>
-                <h3>Live adaptive indicators</h3>
-              </div>
-              <Icon name="tabler:activity-heartbeat" class="h-5 w-5" />
-            </div>
-
-            <div class="biomarker-list">
+            <ul class="mission-event-log">
               {
-                biomarkers.map((item) => (
-                  <div class="biomarker-row">
-                    <div>
-                      <span>{item.label}</span>
-                      <strong>{item.value}</strong>
-                    </div>
-                    <small>{item.delta}</small>
-                  </div>
-                ))
-              }
-            </div>
-          </article>
-
-          <article class="dashboard-card timeline-card">
-            <div class="card-head">
-              <div>
-                <p class="dashboard-overline">Treatment timeline</p>
-                <h3>Session sequence</h3>
-              </div>
-              <Icon name="tabler:timeline-event" class="h-5 w-5" />
-            </div>
-
-            <ul>
-              {
-                timeline.map((item) => (
-                  <li>
-                    <span class="timeline-time">{item.time}</span>
-                    <div>
-                      <strong>{item.title}</strong>
-                      <p>{item.copy}</p>
-                    </div>
+                missionEventLog.map((item, index) => (
+                  <li data-event-log-index={index}>
+                    <span>{item.time}</span>
+                    <strong>{item.label}</strong>
                   </li>
                 ))
               }
             </ul>
           </article>
 
-          <article class="dashboard-card twin-card">
-            <div class="card-head">
-              <div>
-                <p class="dashboard-overline">Prediction layer</p>
-                <h3>Digital twin confidence</h3>
-              </div>
-              <span class="twin-score">87%</span>
-            </div>
+          <div class="workflow-stack">
+            <article class="workflow-card" data-accordion-item="mission-status">
+              <button
+                type="button"
+                class="workflow-summary"
+                data-accordion-trigger="mission-status"
+                aria-expanded="false"
+              >
+                <div>
+                  <p class="dashboard-overline">Mission status</p>
+                  <h3>One route, one lesion, one ready-to-review package</h3>
+                </div>
+                <span class="workflow-badge" data-mission-summary-badge>{caseSummary.status}</span>
+              </button>
 
-            <div class="twin-curve"></div>
-            <p class="twin-note">
-              Response probability is trending upward as localized adaptive delivery aligns with the patient model.
-            </p>
-          </article>
+              <div class="workflow-panel" data-accordion-panel="mission-status" hidden>
+                <div class="metric-grid">
+                  <div class="metric-card">
+                    <span>Mission duration</span>
+                    <strong data-mission-duration>{caseSummary.missionDuration}</strong>
+                  </div>
+                  <div class="metric-card">
+                    <span>Path completion</span>
+                    <strong data-path-completion>100%</strong>
+                  </div>
+                  <div class="metric-card">
+                    <span>Agent location</span>
+                    <strong data-agent-location>{caseSummary.distanceToCore}</strong>
+                  </div>
+                </div>
+
+                <ul class="phase-list">
+                  {
+                    missionPhases.map((phase, index) => (
+                      <li data-phase-row={index}>
+                        <span>{phase.time}</span>
+                        <div>
+                          <strong>{phase.label}</strong>
+                          <p>{phase.copy}</p>
+                        </div>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </article>
+
+            <article class="workflow-card" data-accordion-item="evidence">
+              <button type="button" class="workflow-summary" data-accordion-trigger="evidence" aria-expanded="true">
+                <div>
+                  <p class="dashboard-overline">Evidence</p>
+                  <h3>Checkpoint-linked biomarker and optical biopsy package</h3>
+                </div>
+                <span class="workflow-badge">{missionCheckpoints.length} checkpoints</span>
+              </button>
+
+              <div class="workflow-panel" data-accordion-panel="evidence">
+                <div class="evidence-hero">
+                  <div>
+                    <span class="evidence-pill">Focused checkpoint</span>
+                    <h4 data-evidence-label>{focusedCheckpoint.label}</h4>
+                  </div>
+                  <strong data-evidence-time>{focusedCheckpoint.time}</strong>
+                </div>
+
+                <p class="evidence-copy" data-evidence-note>
+                  {focusedCheckpoint.note}
+                </p>
+
+                <div class="signal-grid" data-evidence-signals>
+                  {
+                    focusedCheckpoint.signals.map((signal) => (
+                      <div class="signal-card">
+                        <span>{signal.label}</span>
+                        <strong>{signal.value}</strong>
+                        <small>{signal.trend}</small>
+                      </div>
+                    ))
+                  }
+                </div>
+
+                <div class="evidence-notes">
+                  <div>
+                    <span>Spatial context</span>
+                    <p data-evidence-context>{focusedCheckpoint.context}</p>
+                  </div>
+                  <div>
+                    <span>Optical biopsy</span>
+                    <p data-evidence-optical>{focusedCheckpoint.opticalBiopsy}</p>
+                  </div>
+                </div>
+
+                <div class="tag-row" data-evidence-provenance>
+                  {focusedCheckpoint.provenance.map((tag) => <span>{tag}</span>)}
+                </div>
+              </div>
+            </article>
+
+            <article class="workflow-card" data-accordion-item="diagnosis">
+              <button type="button" class="workflow-summary" data-accordion-trigger="diagnosis" aria-expanded="false">
+                <div>
+                  <p class="dashboard-overline">Proposed diagnosis</p>
+                  <h3>{dashboardDiagnosis.label}</h3>
+                </div>
+                <span class="workflow-badge" data-diagnosis-confidence>{dashboardDiagnosis.confidence}</span>
+              </button>
+
+              <div class="workflow-panel" data-accordion-panel="diagnosis" hidden>
+                <div class="diagnosis-card">
+                  <div class="diagnosis-head">
+                    <div>
+                      <span>Confidence</span>
+                      <strong>{dashboardDiagnosis.confidence}</strong>
+                    </div>
+                    <div>
+                      <span>Status</span>
+                      <strong data-diagnosis-state>Reviewable</strong>
+                    </div>
+                  </div>
+
+                  <ul class="diagnosis-rationale">
+                    {dashboardDiagnosis.rationale.map((item) => <li>{item}</li>)}
+                  </ul>
+
+                  <div class="tag-row">
+                    {dashboardDiagnosis.provenance.map((tag) => <span>{tag}</span>)}
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="workflow-card" data-accordion-item="challenge">
+              <button type="button" class="workflow-summary" data-accordion-trigger="challenge" aria-expanded="false">
+                <div>
+                  <p class="dashboard-overline">Challenge</p>
+                  <h3>Clinician review prompts remain lightweight and explicit</h3>
+                </div>
+                <span class="workflow-badge" data-review-state>Needs acknowledgment</span>
+              </button>
+
+              <div class="workflow-panel" data-accordion-panel="challenge" hidden>
+                <div class="prompt-grid">
+                  {
+                    challengePrompts.map((prompt) => (
+                      <button type="button" class="prompt-chip" data-review-prompt>
+                        {prompt}
+                      </button>
+                    ))
+                  }
+                </div>
+
+                <div class="challenge-note">
+                  <span>Alternate interpretation</span>
+                  <p>
+                    Reserve this area for a clinician override or a lightweight “needs more evidence” decision without
+                    turning the MVP into a full annotation suite.
+                  </p>
+                </div>
+              </div>
+            </article>
+
+            <article class="workflow-card" data-accordion-item="treatment">
+              <button type="button" class="workflow-summary" data-accordion-trigger="treatment" aria-expanded="false">
+                <div>
+                  <p class="dashboard-overline">Treatment comparison</p>
+                  <h3>Three action-ready therapies derived from the recorded evidence</h3>
+                </div>
+                <span class="workflow-badge" data-treatment-summary>{selectedTreatment.label}</span>
+              </button>
+
+              <div class="workflow-panel" data-accordion-panel="treatment" hidden>
+                <div class="treatment-grid">
+                  {
+                    treatmentOptions.map((option) => (
+                      <button
+                        type="button"
+                        class="treatment-card"
+                        data-treatment-button={option.id}
+                        data-active={option.id === selectedTreatment.id ? 'true' : 'false'}
+                      >
+                        <strong>{option.label}</strong>
+                        <p>{option.summary}</p>
+                      </button>
+                    ))
+                  }
+                </div>
+
+                <div class="treatment-detail-card">
+                  <div class="treatment-detail-head">
+                    <div>
+                      <span data-treatment-label>{selectedTreatment.label}</span>
+                      <h4 data-treatment-fit>{selectedTreatment.fit}</h4>
+                    </div>
+                    <span class="workflow-badge" data-treatment-risk>{selectedTreatment.riskBand}</span>
+                  </div>
+
+                  <p class="evidence-copy" data-treatment-copy>
+                    {selectedTreatment.summary}
+                  </p>
+
+                  <div class="metric-grid">
+                    <div class="metric-card">
+                      <span>Progression risk</span>
+                      <strong data-treatment-progression>{selectedTreatment.progressionRisk}</strong>
+                    </div>
+                    <div class="metric-card">
+                      <span>Reintervention</span>
+                      <strong data-treatment-reintervention>
+                        {selectedTreatment.reinterventionLikelihood}
+                      </strong>
+                    </div>
+                    <div class="metric-card">
+                      <span>Monitoring burden</span>
+                      <strong data-treatment-monitoring>{selectedTreatment.monitoringBurden}</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
         </aside>
       </div>
     </section>
@@ -230,8 +456,8 @@ const timeline = [
   <Fragment slot="footer">
     <footer class="dashboard-footer">
       <div>
-        <strong>Clinician dashboard</strong>
-        <span>3D STL viewer + clinical HUD prototype</span>
+        <strong>Clinician dashboard MVP</strong>
+        <span>Single-case mission review with synchronized STL scene and decision workflow</span>
       </div>
       <a href="/">Back to vision page</a>
     </footer>
@@ -246,9 +472,9 @@ const timeline = [
   .dashboard-page {
     min-height: 100vh;
     background:
-      radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.76), transparent 25%),
-      radial-gradient(circle at 85% 12%, rgba(255, 255, 255, 0.32), transparent 24%),
-      linear-gradient(180deg, #d5e4ff 0%, #d9e7ff 38%, #e5efff 100%);
+      radial-gradient(circle at 16% 8%, rgba(255, 255, 255, 0.85), transparent 22%),
+      radial-gradient(circle at 86% 10%, rgba(255, 255, 255, 0.3), transparent 28%),
+      linear-gradient(180deg, #d6e4ff 0%, #dfeaff 42%, #eaf1ff 100%);
     color: #18306d;
   }
 
@@ -326,7 +552,10 @@ const timeline = [
   }
 
   .dashboard-contact,
-  .brain-gui-actions button {
+  .brain-gui-actions button,
+  .phase-stop,
+  .prompt-chip,
+  .treatment-card {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
@@ -382,8 +611,9 @@ const timeline = [
 
   .dashboard-titlebar h1,
   .brain-workspace-top h2,
-  .patient-card h2,
-  .dashboard-card h3 {
+  .mission-alert h2,
+  .workflow-summary h3,
+  .mission-scrubber-top h3 {
     margin: 0.55rem 0 0;
     letter-spacing: -0.05em;
     color: #18306d;
@@ -394,25 +624,38 @@ const timeline = [
     line-height: 1.02;
   }
 
+  .dashboard-subtitle,
+  .brain-workspace-copy,
+  .mission-alert-copy,
+  .mission-phase-copy,
+  .evidence-copy,
+  .phase-list p,
+  .challenge-note p,
+  .treatment-card p {
+    line-height: 1.68;
+    color: rgba(24, 48, 109, 0.8);
+  }
+
   .dashboard-subtitle {
-    max-width: 42rem;
+    max-width: 44rem;
     margin: 1rem 0 0;
     font-size: 1.05rem;
-    line-height: 1.7;
-    color: rgba(24, 48, 109, 0.8);
   }
 
   .dashboard-status {
     display: grid;
     gap: 0.2rem;
-    min-width: 16rem;
+    min-width: 19rem;
     padding: 1rem 1.2rem;
     border: 1px solid rgba(255, 255, 255, 0.56);
     border-radius: 1.2rem;
     background: rgba(217, 229, 255, 0.52);
     backdrop-filter: blur(14px);
-    font-weight: 700;
     color: #18306d;
+  }
+
+  .dashboard-status strong {
+    font-size: 1.08rem;
   }
 
   .dashboard-status small {
@@ -432,13 +675,14 @@ const timeline = [
 
   .dashboard-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(22rem, 0.86fr);
+    grid-template-columns: minmax(0, 1.36fr) minmax(23rem, 0.88fr);
     gap: 1rem;
     align-items: start;
   }
 
   .brain-workspace,
-  .dashboard-card,
+  .mission-alert,
+  .workflow-card,
   .dashboard-footer {
     border: 1px solid rgba(255, 255, 255, 0.55);
     background: rgba(207, 223, 255, 0.35);
@@ -458,14 +702,25 @@ const timeline = [
     align-items: start;
   }
 
-  .brain-badges {
+  .brain-workspace-copy {
+    max-width: 40rem;
+    margin: 0.9rem 0 0;
+  }
+
+  .brain-badges,
+  .tag-row,
+  .prompt-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 0.55rem;
   }
 
   .brain-badges span,
-  .patient-tags span {
+  .tag-row span,
+  .evidence-pill,
+  .workflow-badge,
+  .mission-alert-badge,
+  .mission-phase-pill {
     padding: 0.55rem 0.8rem;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.52);
@@ -475,6 +730,14 @@ const timeline = [
     color: #22418b;
   }
 
+  .workflow-badge,
+  .mission-alert-badge,
+  .mission-phase-pill,
+  .evidence-pill {
+    background: rgba(239, 232, 28, 0.68);
+    color: #18306d;
+  }
+
   .brain-stage-card {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 18rem;
@@ -482,9 +745,14 @@ const timeline = [
     margin-top: 1.35rem;
   }
 
+  .brain-stage-column {
+    display: grid;
+    gap: 1rem;
+  }
+
   .brain-canvas-wrap {
     position: relative;
-    min-height: 39rem;
+    min-height: 35rem;
     border-radius: 1.5rem;
     overflow: hidden;
     background:
@@ -512,6 +780,54 @@ const timeline = [
     display: block;
   }
 
+  .brain-stage-legend {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    max-width: calc(100% - 2rem);
+    pointer-events: none;
+  }
+
+  .brain-stage-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.72rem;
+    border-radius: 999px;
+    background: rgba(227, 236, 255, 0.72);
+    backdrop-filter: blur(10px);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #1e3b84;
+  }
+
+  .legend-chip {
+    width: 0.72rem;
+    height: 0.72rem;
+    border-radius: 999px;
+    display: inline-flex;
+  }
+
+  .legend-chip-core {
+    background: #ff5d4b;
+  }
+
+  .legend-chip-shell {
+    background: #ffb24c;
+  }
+
+  .legend-chip-path {
+    background: #ffe95b;
+  }
+
+  .legend-chip-robot {
+    background: #ffffff;
+    box-shadow: 0 0 0 0.14rem rgba(255, 233, 91, 0.45);
+  }
+
   .brain-stage-hint {
     position: absolute;
     left: 1rem;
@@ -527,18 +843,82 @@ const timeline = [
     text-align: center;
   }
 
-  .brain-gui {
-    display: grid;
-    gap: 0.9rem;
-    align-content: start;
-  }
-
+  .mission-scrubber-card,
   .brain-gui-block,
-  .brain-gui-readout {
+  .brain-gui-readout,
+  .brain-gui-note,
+  .metric-card,
+  .diagnosis-card,
+  .treatment-detail-card,
+  .challenge-note,
+  .signal-card {
     padding: 1rem;
     border-radius: 1.2rem;
     border: 1px solid rgba(255, 255, 255, 0.48);
     background: rgba(227, 236, 255, 0.56);
+  }
+
+  .mission-scrubber-top,
+  .brain-gui-actions,
+  .mission-alert-head,
+  .workflow-summary,
+  .diagnosis-head,
+  .treatment-detail-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .mission-scrubber-card h3 {
+    font-size: 1.25rem;
+  }
+
+  .mission-phase-copy {
+    margin: 0.85rem 0 1rem;
+  }
+
+  .mission-scrubber-card input[type='range'],
+  .brain-gui-block input[type='range'] {
+    width: 100%;
+    accent-color: #d9cf13;
+  }
+
+  .mission-phase-track {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-top: 1rem;
+  }
+
+  .phase-stop {
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    padding: 0.9rem 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(235, 241, 255, 0.52);
+    color: #18306d;
+  }
+
+  .phase-stop strong {
+    font-size: 0.88rem;
+  }
+
+  .phase-stop span {
+    font-size: 0.75rem;
+    color: rgba(24, 48, 109, 0.72);
+  }
+
+  .phase-stop[data-active='true'] {
+    background: rgba(239, 232, 28, 0.72);
+    box-shadow: 0 18px 26px -22px rgba(178, 167, 0, 0.9);
+  }
+
+  .brain-gui {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
   }
 
   .brain-gui-block p {
@@ -557,6 +937,7 @@ const timeline = [
 
   .brain-gui-actions button {
     justify-content: center;
+    width: 100%;
     padding: 0.82rem 1rem;
     background: #efe81c;
     color: #1b3274;
@@ -582,17 +963,18 @@ const timeline = [
     margin-bottom: 0;
   }
 
-  .brain-gui-block input[type='range'] {
-    width: 100%;
-    accent-color: #d9cf13;
-  }
-
   .brain-gui-readout {
     display: grid;
     gap: 0.8rem;
   }
 
-  .brain-gui-readout span {
+  .brain-gui-readout span,
+  .metric-card span,
+  .signal-card span,
+  .evidence-notes span,
+  .diagnosis-head span,
+  .challenge-note span,
+  .treatment-detail-head span {
     display: block;
     font-size: 0.76rem;
     font-weight: 800;
@@ -601,146 +983,199 @@ const timeline = [
     color: rgba(24, 48, 109, 0.66);
   }
 
-  .brain-gui-readout strong {
+  .brain-gui-readout strong,
+  .metric-card strong,
+  .signal-card strong {
     display: block;
     margin-top: 0.35rem;
     color: #18306d;
   }
 
-  .dashboard-panels {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .dashboard-card {
-    padding: 1.2rem;
-    border-radius: 1.6rem;
-  }
-
-  .card-head,
-  .patient-card-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: start;
-  }
-
-  .patient-age,
-  .twin-score {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 4.5rem;
-    padding: 0.55rem 0.8rem;
-    border-radius: 999px;
-    background: rgba(239, 232, 28, 0.72);
-    color: #18306d;
-    font-weight: 800;
-  }
-
-  .patient-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.55rem;
-    margin-top: 1rem;
-  }
-
-  .biomarker-list {
-    display: grid;
-    gap: 0.7rem;
-    margin-top: 1rem;
-  }
-
-  .biomarker-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    gap: 1rem;
-    padding: 0.9rem 1rem;
-    border-radius: 1rem;
-    background: rgba(235, 241, 255, 0.52);
-  }
-
-  .biomarker-row span {
-    display: block;
-    font-size: 0.86rem;
-    color: rgba(24, 48, 109, 0.7);
-  }
-
-  .biomarker-row strong {
-    display: block;
-    margin-top: 0.22rem;
-    color: #18306d;
-  }
-
-  .biomarker-row small {
-    font-weight: 800;
-    color: #22418b;
-  }
-
-  .timeline-card ul {
-    margin: 1rem 0 0;
-    padding: 0;
-    list-style: none;
-    display: grid;
-    gap: 0.85rem;
-  }
-
-  .timeline-card li {
-    display: grid;
-    grid-template-columns: 3.2rem 1fr;
-    gap: 0.8rem;
-    padding: 0.95rem 1rem;
-    border-radius: 1rem;
-    background: rgba(235, 241, 255, 0.52);
-  }
-
-  .timeline-time {
-    font-weight: 800;
-    color: #d4c90b;
-  }
-
-  .timeline-card strong {
-    display: block;
-    color: #18306d;
-  }
-
-  .timeline-card p,
-  .twin-note {
-    margin: 0.4rem 0 0;
+  .brain-gui-note p {
+    margin: 0;
+    font-size: 0.9rem;
     line-height: 1.6;
     color: rgba(24, 48, 109, 0.76);
   }
 
-  .twin-curve {
-    height: 8.5rem;
-    margin-top: 1rem;
-    border-radius: 1.2rem;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent),
-      linear-gradient(
-        130deg,
-        transparent 18%,
-        rgba(239, 232, 28, 0.92) 19%,
-        rgba(239, 232, 28, 0.92) 21%,
-        transparent 22%
-      ),
-      linear-gradient(
-        115deg,
-        transparent 34%,
-        rgba(255, 255, 255, 0.8) 35%,
-        rgba(255, 255, 255, 0.8) 37%,
-        transparent 38%
-      ),
-      linear-gradient(
-        98deg,
-        transparent 58%,
-        rgba(239, 232, 28, 0.92) 59%,
-        rgba(239, 232, 28, 0.92) 61%,
-        transparent 62%
-      ),
-      rgba(235, 241, 255, 0.56);
-    border: 1px solid rgba(255, 255, 255, 0.44);
+  .dashboard-panels,
+  .workflow-stack,
+  .workflow-panel {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .mission-alert,
+  .workflow-card {
+    border-radius: 1.6rem;
+    padding: 1.2rem;
+  }
+
+  .mission-alert-copy {
+    margin: 0.95rem 0 1rem;
+  }
+
+  .mission-event-log,
+  .phase-list,
+  .diagnosis-rationale {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mission-event-log,
+  .phase-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .mission-event-log li,
+  .phase-list li {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 0.9rem;
+    padding: 0.9rem 1rem;
+    border-radius: 1rem;
+    background: rgba(235, 241, 255, 0.52);
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+
+  .mission-event-log li span,
+  .phase-list li span {
+    font-weight: 800;
+    color: #d4c90b;
+  }
+
+  .mission-event-log li strong,
+  .phase-list li strong {
+    display: block;
+    color: #18306d;
+  }
+
+  .mission-event-log li[data-active='true'],
+  .phase-list li[data-active='true'] {
+    background: rgba(239, 232, 28, 0.2);
+    transform: translateX(0.18rem);
+  }
+
+  .workflow-summary {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    text-align: left;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .workflow-summary h3 {
+    font-size: 1.15rem;
+  }
+
+  .metric-grid,
+  .signal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .metric-card strong,
+  .signal-card strong {
+    font-size: 1.02rem;
+  }
+
+  .evidence-hero {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: end;
+  }
+
+  .evidence-hero h4,
+  .treatment-detail-head h4 {
+    margin: 0.5rem 0 0;
+    font-size: 1.25rem;
+    letter-spacing: -0.04em;
+    color: #18306d;
+  }
+
+  .evidence-notes {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .evidence-notes p {
+    margin: 0.35rem 0 0;
+    line-height: 1.65;
+    color: rgba(24, 48, 109, 0.78);
+  }
+
+  .diagnosis-rationale {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1rem 0;
+  }
+
+  .diagnosis-rationale li {
+    position: relative;
+    padding-left: 1.2rem;
+    line-height: 1.65;
+    color: rgba(24, 48, 109, 0.8);
+  }
+
+  .diagnosis-rationale li::before {
+    content: '';
+    position: absolute;
+    top: 0.62rem;
+    left: 0;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: #efe81c;
+  }
+
+  .prompt-chip {
+    padding: 0.82rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(235, 241, 255, 0.52);
+    color: #18306d;
+  }
+
+  .prompt-chip[data-active='true'] {
+    background: rgba(239, 232, 28, 0.72);
+  }
+
+  .treatment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .treatment-card {
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(235, 241, 255, 0.52);
+    color: #18306d;
+  }
+
+  .treatment-card strong {
+    font-size: 1rem;
+  }
+
+  .treatment-card p {
+    margin: 0.6rem 0 0;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+
+  .treatment-card[data-active='true'] {
+    background: rgba(239, 232, 28, 0.72);
+    box-shadow: 0 18px 26px -22px rgba(178, 167, 0, 0.9);
   }
 
   .dashboard-footer {
@@ -765,12 +1200,13 @@ const timeline = [
   }
 
   @media (max-width: 1280px) {
-    .dashboard-grid {
+    .dashboard-grid,
+    .brain-stage-card {
       grid-template-columns: 1fr;
     }
 
-    .brain-stage-card {
-      grid-template-columns: 1fr;
+    .phase-stop {
+      padding: 0.75rem;
     }
   }
 
@@ -796,9 +1232,17 @@ const timeline = [
       padding-top: 11rem;
     }
 
-    .dashboard-titlebar {
+    .dashboard-titlebar,
+    .brain-workspace-top {
       flex-direction: column;
       align-items: start;
+    }
+
+    .mission-phase-track,
+    .metric-grid,
+    .signal-grid,
+    .treatment-grid {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -811,6 +1255,15 @@ const timeline = [
     .dashboard-footer {
       flex-direction: column;
       align-items: start;
+    }
+
+    .brain-canvas-wrap {
+      min-height: 28rem;
+    }
+
+    .mission-event-log li,
+    .phase-list li {
+      grid-template-columns: 1fr;
     }
   }
 </style>

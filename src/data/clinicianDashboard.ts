@@ -1,0 +1,261 @@
+export type MissionPhase = {
+  id: string;
+  label: string;
+  time: string;
+  status: string;
+  progress: number;
+  title: string;
+  copy: string;
+};
+
+export type BiomarkerSignal = {
+  label: string;
+  value: string;
+  trend: string;
+};
+
+export type MissionCheckpoint = {
+  id: string;
+  label: string;
+  time: string;
+  progress: number;
+  position: [number, number, number];
+  note: string;
+  context: string;
+  opticalBiopsy: string;
+  provenance: string[];
+  signals: BiomarkerSignal[];
+};
+
+export type TreatmentOption = {
+  id: string;
+  label: string;
+  summary: string;
+  fit: string;
+  riskBand: string;
+  progressionRisk: string;
+  reinterventionLikelihood: string;
+  monitoringBurden: string;
+};
+
+export const caseSummary = {
+  patientName: 'Claire Moreau',
+  patientAge: 52,
+  caseTitle: 'Left temporal lesion surveillance',
+  missionDuration: '4 days 13 hours',
+  status: 'Diagnosis ready',
+  distanceToCore: '2.6 mm from lesion core',
+  tags: ['Glioma suspicion', 'Implanted microrobot', 'Digital twin active'],
+};
+
+export const missionPhases: MissionPhase[] = [
+  {
+    id: 'mri',
+    label: 'MRI',
+    time: 'Day 0 · 07:53',
+    status: 'Scan aligned',
+    progress: 0.03,
+    title: 'Baseline MRI registered',
+    copy: 'Structural series and edema envelope aligned with the navigation model.',
+  },
+  {
+    id: 'entry',
+    label: 'Entry',
+    time: 'Day 1 · 08:18',
+    status: 'Endovascular access',
+    progress: 0.2,
+    title: 'Endovascular entry achieved',
+    copy: 'Femoral-to-intracranial route completed and sealing exit device confirmed.',
+  },
+  {
+    id: 'transit',
+    label: 'Transit',
+    time: 'Day 2 · 14:06',
+    status: 'Chemotactic transit',
+    progress: 0.48,
+    title: 'Chemotactic transit stabilized',
+    copy: 'Agent advanced through inflammatory gradients while recording local biomarkers.',
+  },
+  {
+    id: 'approach',
+    label: 'Peritumoral approach',
+    time: 'Day 3 · 19:42',
+    status: 'Sampling margin',
+    progress: 0.79,
+    title: 'Peritumoral sensing complete',
+    copy: 'Optical biopsy and local biomarker package captured around the lesion margin.',
+  },
+  {
+    id: 'diagnosis-ready',
+    label: 'Diagnosis ready',
+    time: 'Day 4 · 09:14',
+    status: 'Package ready',
+    progress: 0.96,
+    title: 'Diagnostic package ready for review',
+    copy: 'The agent completed its route and generated a treatment-ready evidence package.',
+  },
+];
+
+export const missionPathPoints: [number, number, number][] = [
+  [-1.26, -0.58, 0.92],
+  [-1.08, -0.42, 0.76],
+  [-0.82, -0.24, 0.54],
+  [-0.55, -0.12, 0.34],
+  [-0.24, -0.04, 0.18],
+  [0.04, 0.02, 0.05],
+  [0.28, 0.08, -0.04],
+  [0.46, 0.12, -0.11],
+  [0.62, 0.16, -0.18],
+  [0.74, 0.17, -0.22],
+];
+
+export const missionCheckpoints: MissionCheckpoint[] = [
+  {
+    id: 'checkpoint-entry',
+    label: 'Access corridor sealed',
+    time: 'Day 1 · 08:31',
+    progress: 0.18,
+    position: [-1.02, -0.39, 0.72],
+    note: 'Entry sheath closed and baseline inflammatory profile captured.',
+    context: 'Extralesional vascular corridor remained hemodynamically stable.',
+    opticalBiopsy: 'No optical tumor signature at entry location.',
+    provenance: ['route telemetry', 'local biomarkers'],
+    signals: [
+      { label: 'IL-6 baseline', value: '0.18', trend: 'Baseline' },
+      { label: 'Perfusion stability', value: '96%', trend: 'Stable' },
+      { label: 'Immune activation', value: 'Low', trend: 'Nominal' },
+    ],
+  },
+  {
+    id: 'checkpoint-lure',
+    label: 'Cytokine-guided turn',
+    time: 'Day 2 · 06:12',
+    progress: 0.36,
+    position: [-0.58, -0.14, 0.31],
+    note: 'Gradient sensing intensified and route curvature tightened toward the lesion field.',
+    context: 'Signal pattern consistent with chemotactic attraction toward active tumor margin.',
+    opticalBiopsy: 'Diffuse scattering increased without direct malignant confirmation.',
+    provenance: ['path telemetry', 'inflammatory markers'],
+    signals: [
+      { label: 'CXCL12 gradient', value: '+27%', trend: 'Rising' },
+      { label: 'Proteomic drift', value: '0.41', trend: 'Elevated' },
+      { label: 'Motor efficiency', value: '91%', trend: 'Nominal' },
+    ],
+  },
+  {
+    id: 'checkpoint-edema',
+    label: 'Edema boundary',
+    time: 'Day 2 · 18:47',
+    progress: 0.57,
+    position: [0.01, 0.01, 0.07],
+    note: 'Agent crossed from diffuse edema into denser peritumoral signaling field.',
+    context: 'Microenvironment shows sustained inflammatory noise with intact local perfusion.',
+    opticalBiopsy: 'Partial cellular disorganization visible at the edema margin.',
+    provenance: ['optical biopsy', 'local biomarkers'],
+    signals: [
+      { label: 'GFAP response', value: '0.68', trend: 'Rising' },
+      { label: 'Metabolic load', value: '62%', trend: 'Moderate' },
+      { label: 'Edema signature', value: 'Present', trend: 'Confirmed' },
+    ],
+  },
+  {
+    id: 'checkpoint-margin',
+    label: 'Peritumoral ring',
+    time: 'Day 3 · 19:42',
+    progress: 0.81,
+    position: [0.47, 0.12, -0.12],
+    note: 'The agent sampled the outer lesion ring and recorded a localized malignant profile.',
+    context: 'Peritumoral band shows denser, more coherent signaling than earlier checkpoints.',
+    opticalBiopsy: 'Hypercellular margin with infiltrative optical pattern detected.',
+    provenance: ['optical biopsy', 'peritumoral profile'],
+    signals: [
+      { label: 'Tumor-associated markers', value: '+44%', trend: 'High' },
+      { label: 'Cellular instability', value: '0.74', trend: 'High' },
+      { label: 'Response index', value: '0.83', trend: 'Actionable' },
+    ],
+  },
+  {
+    id: 'checkpoint-core-adjacent',
+    label: 'Diagnosis package complete',
+    time: 'Day 4 · 09:14',
+    progress: 0.94,
+    position: [0.69, 0.17, -0.2],
+    note: 'Combined optical biopsy and biomarker package supports a high-grade infiltrative lesion.',
+    context: 'Agent halted 2.6 mm from the lesion core with stable local conditions.',
+    opticalBiopsy: 'Optical biopsy aligns with infiltrative high-grade glioma morphology.',
+    provenance: ['optical biopsy', 'local biomarkers', 'peritumoral profile'],
+    signals: [
+      { label: 'Proteomic instability', value: '0.87', trend: 'High' },
+      { label: 'Thermal susceptibility', value: 'Favorable', trend: 'Therapy-ready' },
+      { label: 'Drug diffusion index', value: '0.64', trend: 'Targetable' },
+    ],
+  },
+];
+
+export const missionEventLog = [
+  { time: 'Day 0 · 07:53', label: 'MRI scan registered', phaseIndex: 0 },
+  { time: 'Day 1 · 08:18', label: 'Endovascular entry confirmed', phaseIndex: 1 },
+  { time: 'Day 2 · 14:06', label: 'Chemotactic transit stabilized', phaseIndex: 2 },
+  { time: 'Day 3 · 19:42', label: 'Optical biopsy at lesion margin complete', phaseIndex: 3 },
+  { time: 'Day 4 · 09:14', label: 'Treatment options generated', phaseIndex: 4 },
+];
+
+export const dashboardDiagnosis = {
+  label: 'Infiltrative high-grade glioma',
+  confidence: '87%',
+  rationale: [
+    'Optical biopsy at the lesion margin shows an infiltrative hypercellular pattern.',
+    'Proteomic and inflammatory markers intensify consistently as the agent approaches the peritumoral ring.',
+    'Local thermal and diffusion signatures support intervention with focal therapy or drug delivery.',
+  ],
+  provenance: ['optical biopsy', 'local biomarkers', 'peritumoral profile'],
+};
+
+export const challengePrompts = [
+  'Biomarker pattern inconsistent?',
+  'Optical biopsy quality insufficient?',
+  'Tumor margin interpretation uncertain?',
+  'Needs more evidence before intervention?',
+];
+
+export const treatmentOptions: TreatmentOption[] = [
+  {
+    id: 'hifu',
+    label: 'HiFU',
+    summary: 'Focused ultrasound for rapid local ablation with moderate edema risk.',
+    fit: 'Best when fast non-contact thermal treatment is prioritized.',
+    riskBand: 'Moderate',
+    progressionRisk: '34%',
+    reinterventionLikelihood: '21%',
+    monitoringBurden: 'Medium',
+  },
+  {
+    id: 'litt',
+    label: 'LITT',
+    summary: 'Thermal ablation aligned with the current margin geometry and thermal signature.',
+    fit: 'Best fit for this lesion profile based on local susceptibility and margin access.',
+    riskBand: 'Moderate-low',
+    progressionRisk: '22%',
+    reinterventionLikelihood: '16%',
+    monitoringBurden: 'Medium',
+  },
+  {
+    id: 'local-drug-delivery',
+    label: 'Local Drug Delivery',
+    summary: 'Localized pharmacologic release with lower acute risk and higher follow-up intensity.',
+    fit: 'Best when tissue preservation outweighs the need for immediate cytoreduction.',
+    riskBand: 'Low acute / higher longitudinal',
+    progressionRisk: '29%',
+    reinterventionLikelihood: '27%',
+    monitoringBurden: 'High',
+  },
+];
+
+export const tumorModel = {
+  position: [0.82, 0.18, -0.22] as [number, number, number],
+  coreRadius: 0.13,
+  shellRadii: [0.2, 0.29, 0.4],
+};
+
+export const initialPhaseId = 'diagnosis-ready';
+export const initialTreatmentId = 'litt';
