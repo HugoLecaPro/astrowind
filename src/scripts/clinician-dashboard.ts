@@ -2,8 +2,10 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import {
+  biomarkerSeries,
   caseSummary,
   dashboardDiagnosis,
+  initialBiomarkerSeriesId,
   initialPhaseId,
   initialTreatmentId,
   missionCheckpoints,
@@ -12,6 +14,7 @@ import {
   treatmentOptions,
   tumorModel,
   type BiomarkerSignal,
+  type BiomarkerSeries,
 } from '~/data/clinicianDashboard';
 
 const canvas = document.querySelector<HTMLCanvasElement>('[data-brain-viewer]');
@@ -35,6 +38,14 @@ if (canvas) {
   const evidenceOptical = document.querySelector<HTMLElement>('[data-evidence-optical]');
   const evidenceSignals = document.querySelector<HTMLElement>('[data-evidence-signals]');
   const evidenceProvenance = document.querySelector<HTMLElement>('[data-evidence-provenance]');
+  const biomarkerSeriesLabel = document.querySelector<HTMLElement>('[data-biomarker-series-label]');
+  const biomarkerCurrentValue = document.querySelector<HTMLElement>('[data-biomarker-current-value]');
+  const biomarkerCurrentTrend = document.querySelector<HTMLElement>('[data-biomarker-current-trend]');
+  const biomarkerSeriesSummary = document.querySelector<HTMLElement>('[data-biomarker-series-summary]');
+  const biomarkerChartSvg = document.querySelector<SVGSVGElement>('[data-biomarker-chart-svg]');
+  const biomarkerSeriesButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('[data-biomarker-series-button]')
+  );
   const diagnosisState = document.querySelector<HTMLElement>('[data-diagnosis-state]');
   const diagnosisConfidence = document.querySelector<HTMLElement>('[data-diagnosis-confidence]');
   const reviewState = document.querySelector<HTMLElement>('[data-review-state]');
@@ -198,6 +209,7 @@ if (canvas) {
 
   let brainMesh: THREE.Mesh | null = null;
   let activeCheckpointIndex = missionCheckpoints.length - 1;
+  let activeBiomarkerSeriesId = initialBiomarkerSeriesId;
 
   const createOrganicSphere = (radius: number, color: number, opacity: number, jitter: number) => {
     const geometry = new THREE.IcosahedronGeometry(radius, 5);
@@ -310,6 +322,14 @@ if (canvas) {
     controls.update();
   };
 
+  const syncBrainVisibility = () => {
+    if (!brainMesh || !opacityRange) return;
+
+    const opacityValue = Number(opacityRange.value) / 100;
+    brainMaterial.opacity = opacityValue;
+    brainMesh.visible = opacityValue > 0;
+  };
+
   const focusLesion = () => {
     const [x, y, z] = tumorModel.position;
     camera.position.set(x + 0.64, y + 0.36, z + 1.4);
@@ -347,6 +367,78 @@ if (canvas) {
     container.innerHTML = tags.map((tag) => `<span>${tag}</span>`).join('');
   };
 
+  const getBiomarkerSeries = (seriesId: string) =>
+    biomarkerSeries.find((series) => series.id === seriesId) ?? biomarkerSeries[0];
+
+  const formatBiomarkerValue = (series: BiomarkerSeries, value: number) => {
+    const displayValue =
+      series.unit === '% drift' ? `${Math.round(value)}${series.unit}` : `${value.toFixed(2)} ${series.unit}`;
+    return displayValue;
+  };
+
+  const renderBiomarkerChart = () => {
+    if (!biomarkerChartSvg) return;
+
+    const series = getBiomarkerSeries(activeBiomarkerSeriesId);
+    const width = 420;
+    const height = 212;
+    const paddingX = 18;
+    const paddingY = 24;
+    const values = series.points.map((point) => point.value);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = Math.max(max - min, 1);
+
+    const coordinates = series.points.map((point, index) => {
+      const x = paddingX + (index / Math.max(series.points.length - 1, 1)) * (width - paddingX * 2);
+      const y = height - paddingY - ((point.value - min) / range) * (height - paddingY * 2);
+      return { ...point, x, y };
+    });
+
+    const path = coordinates.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+
+    const gridLines = [0.2, 0.5, 0.8]
+      .map((ratio) => {
+        const y = height - paddingY - ratio * (height - paddingY * 2);
+        return `<line x1="${paddingX}" y1="${y}" x2="${width - paddingX}" y2="${y}" class="evidence-grid-line" />`;
+      })
+      .join('');
+
+    const circles = coordinates
+      .map((point, index) => {
+        const active = index === activeCheckpointIndex;
+        return `
+          <circle
+            cx="${point.x}"
+            cy="${point.y}"
+            r="${active ? 6 : 4}"
+            class="evidence-chart-point"
+            style="--point-color:${series.color};"
+            data-chart-point-index="${index}"
+          />
+          <text x="${point.x}" y="${height - 6}" class="evidence-chart-label">${point.label}</text>
+        `;
+      })
+      .join('');
+
+    biomarkerChartSvg.innerHTML = `
+      ${gridLines}
+      <path d="${path}" class="evidence-chart-trace" style="--trace-color:${series.color};" />
+      ${circles}
+    `;
+
+    const currentPoint = series.points[activeCheckpointIndex] ?? series.points.at(-1)!;
+    const focusedCheckpoint = missionCheckpoints[activeCheckpointIndex];
+    setText(biomarkerSeriesLabel, series.label);
+    setText(biomarkerCurrentValue, formatBiomarkerValue(series, currentPoint.value));
+    setText(biomarkerSeriesSummary, series.summary);
+    setText(biomarkerCurrentTrend, `Focused at ${focusedCheckpoint.label} · ${focusedCheckpoint.time}`);
+
+    for (const button of biomarkerSeriesButtons) {
+      button.dataset.active = button.dataset.biomarkerSeriesButton === series.id ? 'true' : 'false';
+    }
+  };
+
   const nearestCheckpointIndex = (progress: number) => {
     let checkpointIndex = 0;
 
@@ -382,6 +474,7 @@ if (canvas) {
     renderSignals(checkpoint.signals);
     renderTags(evidenceProvenance, checkpoint.provenance);
     updateCheckpointHighlight();
+    renderBiomarkerChart();
   };
 
   const updateTreatment = (treatmentId: string) => {
@@ -517,6 +610,7 @@ if (canvas) {
       brainMesh = mesh;
       brainGroup.add(mesh);
       buildSceneObjects();
+      syncBrainVisibility();
       fitWholeBrain();
 
       const position = geometry.getAttribute('position');
@@ -537,7 +631,7 @@ if (canvas) {
   });
 
   opacityRange?.addEventListener('input', () => {
-    brainMaterial.opacity = Number(opacityRange.value) / 100;
+    syncBrainVisibility();
   });
 
   resetButton?.addEventListener('click', fitWholeBrain);
@@ -568,6 +662,15 @@ if (canvas) {
     });
   }
 
+  for (const button of biomarkerSeriesButtons) {
+    button.addEventListener('click', () => {
+      const seriesId = button.dataset.biomarkerSeriesButton;
+      if (!seriesId) return;
+      activeBiomarkerSeriesId = seriesId;
+      renderBiomarkerChart();
+    });
+  }
+
   for (const prompt of reviewPrompts) {
     prompt.addEventListener('click', () => {
       const active = prompt.dataset.active === 'true';
@@ -590,6 +693,20 @@ if (canvas) {
   canvas.addEventListener('pointermove', (event) => {
     const checkpointIndex = pickCheckpointIndex(event);
     canvas.style.cursor = checkpointIndex === null ? 'grab' : 'pointer';
+  });
+
+  biomarkerChartSvg?.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const point = target.closest('[data-chart-point-index]');
+    if (!point) return;
+
+    const checkpointIndex = Number(point.getAttribute('data-chart-point-index'));
+    if (Number.isNaN(checkpointIndex)) return;
+
+    updateEvidence(checkpointIndex);
+    setAccordion('evidence');
   });
 
   const animate = () => {

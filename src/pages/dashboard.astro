@@ -1,9 +1,11 @@
 ---
 import { Icon } from 'astro-icon/components';
 import {
+  biomarkerSeries,
   caseSummary,
   challengePrompts,
   dashboardDiagnosis,
+  initialBiomarkerSeriesId,
   initialPhaseId,
   initialTreatmentId,
   missionCheckpoints,
@@ -32,6 +34,32 @@ const initialPhaseIndex = missionPhases.findIndex((phase) => phase.id === initia
 const initialPhase = missionPhases[initialPhaseIndex];
 const focusedCheckpoint = missionCheckpoints.at(-1)!;
 const selectedTreatment = treatmentOptions.find((item) => item.id === initialTreatmentId) ?? treatmentOptions[0];
+const initialBiomarkerSeries =
+  biomarkerSeries.find((series) => series.id === initialBiomarkerSeriesId) ?? biomarkerSeries[0];
+const biomarkerChartWidth = 420;
+const biomarkerChartHeight = 212;
+const biomarkerChartPaddingX = 18;
+const biomarkerChartPaddingY = 24;
+const initialBiomarkerValues = initialBiomarkerSeries.points.map((point) => point.value);
+const initialBiomarkerMin = Math.min(...initialBiomarkerValues);
+const initialBiomarkerMax = Math.max(...initialBiomarkerValues);
+const initialBiomarkerRange = Math.max(initialBiomarkerMax - initialBiomarkerMin, 1);
+const initialBiomarkerCoordinates = initialBiomarkerSeries.points.map((point, index) => {
+  const x =
+    biomarkerChartPaddingX +
+    (index / Math.max(initialBiomarkerSeries.points.length - 1, 1)) *
+      (biomarkerChartWidth - biomarkerChartPaddingX * 2);
+  const y =
+    biomarkerChartHeight -
+    biomarkerChartPaddingY -
+    ((point.value - initialBiomarkerMin) / initialBiomarkerRange) * (biomarkerChartHeight - biomarkerChartPaddingY * 2);
+
+  return { ...point, x, y };
+});
+const initialBiomarkerPath = initialBiomarkerCoordinates
+  .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`)
+  .join(' ');
+const initialBiomarkerCurrentPoint = initialBiomarkerSeries.points.at(-1)!;
 ---
 
 <Layout metadata={metadata}>
@@ -171,7 +199,7 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
                 </label>
                 <label>
                   <span>Brain shell opacity</span>
-                  <input type="range" min="30" max="100" value="58" data-brain-range="opacity" />
+                  <input type="range" min="0" max="100" value="58" data-brain-range="opacity" />
                 </label>
               </section>
 
@@ -297,6 +325,92 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
                 <p class="evidence-copy" data-evidence-note>
                   {focusedCheckpoint.note}
                 </p>
+
+                <div class="evidence-chart-card">
+                  <div class="evidence-chart-head">
+                    <div>
+                      <span class="evidence-chart-kicker">Biomarker timeseries</span>
+                      <h5 data-biomarker-series-label>{initialBiomarkerSeries.label}</h5>
+                    </div>
+
+                    <div class="evidence-chart-current">
+                      <span>Current state</span>
+                      <strong data-biomarker-current-value>
+                        {initialBiomarkerCurrentPoint.value}
+                        {initialBiomarkerSeries.unit}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div class="evidence-series-tabs">
+                    {
+                      biomarkerSeries.map((series) => (
+                        <button
+                          type="button"
+                          class="evidence-series-tab"
+                          data-biomarker-series-button={series.id}
+                          data-active={series.id === initialBiomarkerSeries.id ? 'true' : 'false'}
+                        >
+                          {series.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+
+                  <div class="evidence-chart-wrap">
+                    <svg
+                      viewBox={`0 0 ${biomarkerChartWidth} ${biomarkerChartHeight}`}
+                      class="evidence-chart-svg"
+                      data-biomarker-chart-svg
+                      aria-label="Biomarker timeseries"
+                    >
+                      {
+                        [0.2, 0.5, 0.8].map((ratio) => {
+                          const y =
+                            biomarkerChartHeight -
+                            biomarkerChartPaddingY -
+                            ratio * (biomarkerChartHeight - biomarkerChartPaddingY * 2);
+                          return (
+                            <line
+                              x1={biomarkerChartPaddingX}
+                              y1={y}
+                              x2={biomarkerChartWidth - biomarkerChartPaddingX}
+                              y2={y}
+                              class="evidence-grid-line"
+                            />
+                          );
+                        })
+                      }
+                      <path
+                        d={initialBiomarkerPath}
+                        class="evidence-chart-trace"
+                        style={`--trace-color:${initialBiomarkerSeries.color};`}></path>
+                      {
+                        initialBiomarkerCoordinates.map((point, index) => (
+                          <>
+                            <circle
+                              cx={point.x}
+                              cy={point.y}
+                              r={index === initialBiomarkerCoordinates.length - 1 ? 6 : 4}
+                              class="evidence-chart-point"
+                              style={`--point-color:${initialBiomarkerSeries.color};`}
+                            />
+                            <text x={point.x} y={biomarkerChartHeight - 6} class="evidence-chart-label">
+                              {point.label}
+                            </text>
+                          </>
+                        ))
+                      }
+                    </svg>
+                  </div>
+
+                  <div class="evidence-chart-meta">
+                    <p data-biomarker-series-summary>{initialBiomarkerSeries.summary}</p>
+                    <span data-biomarker-current-trend>
+                      Focused at {focusedCheckpoint.label} · {focusedCheckpoint.time}
+                    </span>
+                  </div>
+                </div>
 
                 <div class="signal-grid" data-evidence-signals>
                   {
@@ -1091,6 +1205,144 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
     gap: 0.8rem;
   }
 
+  .evidence-chart-card {
+    display: grid;
+    gap: 0.95rem;
+    padding: 1rem;
+    border-radius: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    background: rgba(234, 241, 255, 0.62);
+  }
+
+  .evidence-chart-head,
+  .evidence-chart-current {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: end;
+  }
+
+  .evidence-chart-kicker {
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(24, 48, 109, 0.62);
+  }
+
+  .evidence-chart-head h5 {
+    margin: 0.45rem 0 0;
+    font-size: 1.2rem;
+    letter-spacing: -0.04em;
+    color: #18306d;
+  }
+
+  .evidence-chart-current {
+    align-items: center;
+    padding: 0.7rem 0.9rem;
+    border-radius: 1rem;
+    background: rgba(239, 232, 28, 0.18);
+  }
+
+  .evidence-chart-current span,
+  .evidence-chart-meta span {
+    display: block;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(24, 48, 109, 0.62);
+  }
+
+  .evidence-chart-current strong {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 1.1rem;
+    color: #18306d;
+  }
+
+  .evidence-series-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+
+  .evidence-series-tab {
+    padding: 0.65rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: rgba(255, 255, 255, 0.45);
+    color: #21448f;
+    font-size: 0.84rem;
+    font-weight: 700;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .evidence-series-tab[data-active='true'] {
+    background: rgba(239, 232, 28, 0.72);
+    color: #18306d;
+    transform: translateY(-1px);
+  }
+
+  .evidence-chart-wrap {
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent), rgba(214, 226, 255, 0.6);
+    overflow: hidden;
+  }
+
+  .evidence-chart-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .evidence-grid-line {
+    stroke: rgba(54, 86, 160, 0.14);
+    stroke-width: 1;
+  }
+
+  .evidence-chart-trace {
+    fill: none;
+    stroke: var(--trace-color);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 8px 12px rgba(31, 61, 128, 0.15));
+  }
+
+  .evidence-chart-point {
+    fill: var(--point-color);
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-width: 2;
+  }
+
+  .evidence-chart-label {
+    fill: rgba(24, 48, 109, 0.68);
+    font-size: 9px;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .evidence-chart-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: end;
+  }
+
+  .evidence-chart-meta p {
+    margin: 0;
+    max-width: 28rem;
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: rgba(24, 48, 109, 0.76);
+  }
+
   .metric-card strong,
   .signal-card strong {
     font-size: 1.02rem;
@@ -1253,6 +1505,12 @@ const selectedTreatment = treatmentOptions.find((item) => item.id === initialTre
     .signal-grid,
     .treatment-grid {
       grid-template-columns: 1fr;
+    }
+
+    .evidence-chart-head,
+    .evidence-chart-meta {
+      flex-direction: column;
+      align-items: start;
     }
   }
 

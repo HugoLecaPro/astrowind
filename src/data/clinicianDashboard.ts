@@ -14,6 +14,21 @@ export type BiomarkerSignal = {
   trend: string;
 };
 
+export type BiomarkerSeriesPoint = {
+  checkpointId: string;
+  label: string;
+  value: number;
+};
+
+export type BiomarkerSeries = {
+  id: string;
+  label: string;
+  unit: string;
+  color: string;
+  summary: string;
+  points: BiomarkerSeriesPoint[];
+};
+
 export type MissionCheckpoint = {
   id: string;
   label: string;
@@ -37,6 +52,65 @@ export type TreatmentOption = {
   reinterventionLikelihood: string;
   monitoringBurden: string;
 };
+
+export const biomarkerSeries: BiomarkerSeries[] = [
+  {
+    id: 'proteomic-instability',
+    label: 'Proteomic instability',
+    unit: 'index',
+    color: '#ff8c55',
+    summary: 'Composite instability rises as the robot moves into the peritumoral field.',
+    points: [
+      { checkpointId: 'checkpoint-implant', label: 'Implant', value: 0.18 },
+      { checkpointId: 'checkpoint-lure', label: 'Gradient', value: 0.41 },
+      { checkpointId: 'checkpoint-edema', label: 'Edema', value: 0.58 },
+      { checkpointId: 'checkpoint-margin', label: 'Margin', value: 0.74 },
+      { checkpointId: 'checkpoint-core-adjacent', label: 'Package', value: 0.87 },
+    ],
+  },
+  {
+    id: 'gfap-response',
+    label: 'GFAP response',
+    unit: 'index',
+    color: '#5f8fff',
+    summary: 'Glial injury-associated signal remains low at deployment and strengthens near the lesion.',
+    points: [
+      { checkpointId: 'checkpoint-implant', label: 'Implant', value: 0.14 },
+      { checkpointId: 'checkpoint-lure', label: 'Gradient', value: 0.28 },
+      { checkpointId: 'checkpoint-edema', label: 'Edema', value: 0.68 },
+      { checkpointId: 'checkpoint-margin', label: 'Margin', value: 0.79 },
+      { checkpointId: 'checkpoint-core-adjacent', label: 'Package', value: 0.83 },
+    ],
+  },
+  {
+    id: 'cxcl12-gradient',
+    label: 'CXCL12 gradient',
+    unit: '% drift',
+    color: '#f2db38',
+    summary: 'Chemotactic guidance signal peaks during route lock and then stabilizes close to the lesion.',
+    points: [
+      { checkpointId: 'checkpoint-implant', label: 'Implant', value: 8 },
+      { checkpointId: 'checkpoint-lure', label: 'Gradient', value: 27 },
+      { checkpointId: 'checkpoint-edema', label: 'Edema', value: 33 },
+      { checkpointId: 'checkpoint-margin', label: 'Margin', value: 29 },
+      { checkpointId: 'checkpoint-core-adjacent', label: 'Package', value: 24 },
+    ],
+  },
+  {
+    id: 'drug-diffusion-index',
+    label: 'Drug diffusion index',
+    unit: 'index',
+    color: '#7cd7c5',
+    summary: 'Local tissue receptivity becomes more favorable as the agent nears the intervention zone.',
+    points: [
+      { checkpointId: 'checkpoint-implant', label: 'Implant', value: 0.22 },
+      { checkpointId: 'checkpoint-lure', label: 'Gradient', value: 0.31 },
+      { checkpointId: 'checkpoint-edema', label: 'Edema', value: 0.47 },
+      { checkpointId: 'checkpoint-margin', label: 'Margin', value: 0.58 },
+      { checkpointId: 'checkpoint-core-adjacent', label: 'Package', value: 0.64 },
+    ],
+  },
+];
 
 export const caseSummary = {
   patientName: 'Claire Moreau',
@@ -258,3 +332,4 @@ export const tumorModel = {
 
 export const initialPhaseId = 'diagnosis-ready';
 export const initialTreatmentId = 'litt';
+export const initialBiomarkerSeriesId = 'proteomic-instability';
